@@ -59,9 +59,9 @@ public class MecTesterAutonomous extends LinearOpMode {
          \*/
 
         // Drive forward, back, left, right...
-        robot.mecTurn(MecanumHardware.TURN_SPEED, 90, 3);
+        robot.drive(1.0, 0.0, 0.0, 1.0);
         robot.robotWait(2.0);
-        robot.mecTurn(MecanumHardware.TURN_SPEED, -90, 3);
+        robot.drive(0.0, 1.0, 1.0, 0.0);
         robot.robotWait(2.0);
 
 
