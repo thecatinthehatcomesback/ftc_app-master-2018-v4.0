@@ -52,7 +52,7 @@ public class MecanumHardware
 
     // Autonomous Drive Speeds
     static final double     DRIVE_SPEED             = 0.45;
-    static final double     HYPER_SPEED             = 0.8;
+    static final double     HYPER_SPEED             = 0.7;
     static final double     CHILL_SPEED             = 0.3;
     static final double     CREEP_SPEED             = 0.2;
     static final double     TURN_SPEED              = 0.35;
@@ -336,14 +336,31 @@ public class MecanumHardware
         }
     }
     public void advMecDrive(double power, double vectorDistance,
-                         double vectorAng, double driveAng,
-                         double timeoutS) throws InterruptedException {
+                         double vectorAng, double timeoutS) throws InterruptedException {
         /**
          * In this mecanum drive method, we are trying to have the robot
          * drive towards a vector while the robot itself is at an angle.
+         *
+         * We add the Sin of our angle to the Cos in order to get the powers for each motor
          */
 
+        double leftFront  = Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng));
+        double rightFront = -Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng));
+        double leftBack   = -Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng));
+        double rightBack  = Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng));
 
+
+        double SF = findScaleFactor(leftFront, rightFront, leftBack, rightBack);
+        leftFront  = leftFront  * SF * power;
+        rightFront = rightFront * SF * power;
+        leftBack   = leftBack   * SF * power;
+        rightBack  = rightBack  * SF * power;
+
+
+        runNoEncoders();
+        drive(leftFront, rightFront, leftBack, rightBack);
+
+        opMode.telemetry.addData("Power: ","%.2f, %.2f, %.2f, %.2f", leftFront, rightFront, leftBack, rightBack);
 
     }
     public void mecTurn(double power, int degrees, double timeoutS) throws InterruptedException {  //// TODO: 9/20/2018 Look through this and streamline code
@@ -530,7 +547,6 @@ public class MecanumHardware
         imu.initialize(parameters);
 
         imu.startAccelerationIntegration(new Position(), new Velocity(), 250);
-
     }
     public int getCurrentAngle() {
         angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
