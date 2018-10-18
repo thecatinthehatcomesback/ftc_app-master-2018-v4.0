@@ -43,6 +43,7 @@ public class MecAutonomous extends LinearOpMode {
          * new programming...
          */
         robot.init(hardwareMap, this);
+        // Init IMU sensor later when the match starts
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status: ", "Resetting Encoders...");

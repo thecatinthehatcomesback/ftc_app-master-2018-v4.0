@@ -339,16 +339,24 @@ public class MecanumHardware
                          double vectorAng, double timeoutS) throws InterruptedException {
         /**
          * In this mecanum drive method, we are trying to have the robot
-         * drive towards a vector while the robot itself is at an angle.
+         * drive at an angle while the face of the robot remains pointed
+         * ahead.
          *
-         * We add the Sin of our angle to the Cos in order to get the powers for each motor
+         *
+         * / = back left and forward right motors
+         * \ = back right and forward front motors
+         *
+         * We add the Sin of our angle to the Cos in order to get the
+         * powers for \ side of motors while we subtract Sin from Cos
+         * for the / side of motors.
          */
-
+// TODO: 10/17/2018 Continue work on this....
         double leftFront  = Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng));
         double rightFront = -Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng));
         double leftBack   = -Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng));
         double rightBack  = Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng));
 
+        int distanceToTravel = 0;
 
         double SF = findScaleFactor(leftFront, rightFront, leftBack, rightBack);
         leftFront  = leftFront  * SF * power;
@@ -362,6 +370,52 @@ public class MecanumHardware
 
         opMode.telemetry.addData("Power: ","%.2f, %.2f, %.2f, %.2f", leftFront, rightFront, leftBack, rightBack);
 
+        int target;
+        ElapsedTime runtime = new ElapsedTime();
+        boolean keepDriving = true;
+
+        if (opMode.opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            distanceToTravel  = (int) (vectorDistance * COUNTS_PER_INCH);
+
+
+            // Reset the timeout time and start motion.
+            runtime.reset();
+
+            drive(power, power, power, power);
+
+            while (opMode.opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    keepDriving) {
+
+                int leftFrontPosition = leftFrontMotor.getCurrentPosition();
+                int rightFrontPosition = rightFrontMotor.getCurrentPosition();
+                int leftBackPosition = leftBackMotor.getCurrentPosition();
+                int rightBackPosition = rightBackMotor.getCurrentPosition();
+
+                //  Exit the method once robot stops
+                if (!leftFrontMotor.isBusy() || !rightFrontMotor.isBusy() ||
+                        !leftBackMotor.isBusy() || !rightBackMotor.isBusy()) {
+                    keepDriving = false;
+                }
+
+                // Log Messages
+                /*Log.d("catbot", String.format("encoderDrive targ[%5d,%5d], curr[%5d,%5d] power [%.3f,%.3f]",
+                        newLeftTarget,  newRightTarget, leftPosition, rightPosition, leftSpeed, rightSpeed));*/
+
+                // Display it for the driver
+                opMode.telemetry.addData("Current Path",  "Running at :%7d :%7d :%7d :%7d",
+                        leftFrontPosition, rightFrontPosition, leftBackPosition, rightBackPosition);
+                opMode.telemetry.addData("Power: ", "%.3f", power);
+                opMode.telemetry.addData("Time: ","%.4f seconds", runtime.seconds());
+                opMode.telemetry.update();
+            }
+
+
+            // Stop all motion
+            drive(0, 0, 0, 0);
+        }
     }
     public void mecTurn(double power, int degrees, double timeoutS) throws InterruptedException {  //// TODO: 9/20/2018 Look through this and streamline code
         /**
@@ -515,12 +569,21 @@ public class MecanumHardware
          * Pull tail in all the way
          */
 
+
         tailMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         // Get motor down
-        tailMotor.setTargetPosition(2000);
+        tailMotor.setTargetPosition(17345);
+        tailMotor.setPower(1.0);
+        // Wait until the robot is completely finished
+        while(tailMotor.isBusy()){
+            robotWait(1.0);
+        }
 
         // Slide out left aways
-        mecDriveHorizontal(CHILL_SPEED, 2.0, 3);
+
+
+        // Pull tail back into the robot
+
     }
 
     /**
