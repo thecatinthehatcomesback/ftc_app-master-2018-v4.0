@@ -370,7 +370,6 @@ public class MecanumHardware
 
         opMode.telemetry.addData("Power: ","%.2f, %.2f, %.2f, %.2f", leftFront, rightFront, leftBack, rightBack);
 
-        int target;
         ElapsedTime runtime = new ElapsedTime();
         boolean keepDriving = true;
 

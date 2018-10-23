@@ -22,6 +22,7 @@ public class MecTesterAutonomous extends LinearOpMode {
 
     /* Declare OpMode members. */
     MecanumHardware robot = new MecanumHardware();   // Use the mecanum hardware
+    CatVisionHardware eyes = new CatVisionHardware();   // Use the mecanum hardware
     private ElapsedTime runtime = new ElapsedTime();
     private ElapsedTime delayTimer = new ElapsedTime();
 
@@ -34,6 +35,7 @@ public class MecTesterAutonomous extends LinearOpMode {
          */
         robot.init(hardwareMap, this);
         robot.IMUinit();
+        eyes.initDogeforia(hardwareMap, this);
 
         // Send telemetry message to signify robot is waiting
         telemetry.addData("Status: ", "Resetting Encoders...");
@@ -58,23 +60,14 @@ public class MecTesterAutonomous extends LinearOpMode {
          *
          \*/
 
-        // Drive forward, back, left, right...
-        robot.advMecDrive(MecanumHardware.HYPER_SPEED, 3, 55, 0);
-        robot.robotWait(0.8);
-        robot.drive(0, 0, 0, 0);
-        robot.robotWait(0.8);
-        robot.advMecDrive(MecanumHardware.HYPER_SPEED, 3, 115, 0);
-        robot.robotWait(0.8);
-        robot.drive(0, 0, 0, 0);
-        robot.robotWait(0.8);
-        robot.advMecDrive(MecanumHardware.HYPER_SPEED, 3, 235, 0);
-        robot.robotWait(0.8);
-        robot.drive(0, 0, 0, 0);
-        robot.robotWait(0.8);
-        robot.advMecDrive(MecanumHardware.HYPER_SPEED, 3, 295, 0);
-        robot.robotWait(0.8);
-        robot.drive(0, 0, 0, 0);
-        robot.robotWait(0.8);
+        while (opModeIsActive()) {
+
+            eyes.loop();
+            telemetry.addData("X Pos: ", eyes.detector.getXPosition());
+            telemetry.addData("Pos:", eyes.findGoldPos().toString());
+            telemetry.update();
+        }
+
 
 
         /**

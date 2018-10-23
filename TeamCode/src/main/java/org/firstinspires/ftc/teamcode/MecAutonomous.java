@@ -24,7 +24,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class MecAutonomous extends LinearOpMode {
 
     /* Declare OpMode members. */
-    MecanumHardware robot = new MecanumHardware();   // Use our mecanum hardware
+    MecanumHardware robot = new MecanumHardware();      // Use our mecanum hardware
+    CatVisionHardware eyes = new CatVisionHardware();   // Doge and vision init
     private ElapsedTime runTime = new ElapsedTime();
     private ElapsedTime delayTimer = new ElapsedTime();
     private double timeDelay;
@@ -32,7 +33,7 @@ public class MecAutonomous extends LinearOpMode {
     private boolean isCraterSide = true;
     private boolean isParkRedCrater = true;
 
-    private HardwareCatBot.StonePos stonePos = HardwareCatBot.StonePos.Nah;
+    private CatVisionHardware.samplingPos samplingPos = CatVisionHardware.samplingPos.CENTER;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -44,6 +45,7 @@ public class MecAutonomous extends LinearOpMode {
          */
         robot.init(hardwareMap, this);
         // Init IMU sensor later when the match starts
+        eyes.initDogeforia(hardwareMap, this);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status: ", "Resetting Encoders...");
@@ -136,9 +138,9 @@ public class MecAutonomous extends LinearOpMode {
             }
 
             if (isParkRedCrater) {
-                telemetry.addData("Parking Crater", "Red");
+                telemetry.addData("Parking Crater: ", "Red");
             } else {
-                telemetry.addData("Parking Crater", "Blue");
+                telemetry.addData("Parking Crater: ", "Blue");
             }
             telemetry.update();
 
@@ -169,9 +171,33 @@ public class MecAutonomous extends LinearOpMode {
         while(robot.tailMotor.isBusy()){
             sleep(1);
         }
-        robot.mecDriveHorizontal(robot.DRIVE_SPEED,2.0,2.0);
-        robot.mecDriveVertical(robot.DRIVE_SPEED,2.0,2.0);
-        robot.mecDriveHorizontal(robot.DRIVE_SPEED,-2.0,2.0);
+        robot.mecDriveHorizontal(robot.DRIVE_SPEED,3.0,2.0);
+        robot.mecDriveVertical(robot.DRIVE_SPEED,3.0,2.0);
+        robot.mecDriveHorizontal(robot.DRIVE_SPEED,-3.0,2.0);
+
+        // Find and store the values of the sampling
+        eyes.findGoldPos();
+        // Slide if left or right
+        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 10, 3.0);
+        switch (samplingPos) {
+            case LEFT:
+                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, -12, 4.0);
+                break;
+            case RIGHT:
+                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, 12, 4.0);
+                break;
+        }
+        // Drive forward
+        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 18, 4.0);
+        // Switch back to the center
+        switch (samplingPos) {
+            case LEFT:
+                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, 12, 4.0);
+                break;
+            case RIGHT:
+                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, -12, 4.0);
+                break;
+        }
 
         //Delay the amount we selected
         robot.robotWait(timeDelay);
