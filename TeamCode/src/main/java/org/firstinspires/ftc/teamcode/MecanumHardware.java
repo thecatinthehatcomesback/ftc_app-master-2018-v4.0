@@ -611,8 +611,8 @@ public class MecanumHardware
         imu.startAccelerationIntegration(new Position(), new Velocity(), 250);
     }
     public int getCurrentAngle() {
-        angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-        return (int)angles.thirdAngle;
+        angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        return (int)angles.firstAngle;
     }
 
     /**

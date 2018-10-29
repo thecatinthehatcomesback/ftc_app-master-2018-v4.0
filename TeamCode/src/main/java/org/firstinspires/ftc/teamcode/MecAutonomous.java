@@ -176,28 +176,7 @@ public class MecAutonomous extends LinearOpMode {
         robot.mecDriveHorizontal(robot.DRIVE_SPEED,-3.0,2.0);
 
         // Find and store the values of the sampling
-        eyes.findGoldPos();
-        // Slide if left or right
-        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 10, 3.0);
-        switch (samplingPos) {
-            case LEFT:
-                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, -12, 4.0);
-                break;
-            case RIGHT:
-                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, 12, 4.0);
-                break;
-        }
-        // Drive forward
-        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 18, 4.0);
-        // Switch back to the center
-        switch (samplingPos) {
-            case LEFT:
-                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, 12, 4.0);
-                break;
-            case RIGHT:
-                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, -12, 4.0);
-                break;
-        }
+       samplingPos = eyes.findGoldPos();
 
         //Delay the amount we selected
         robot.robotWait(timeDelay);
@@ -216,9 +195,37 @@ public class MecAutonomous extends LinearOpMode {
          */
     }
     public void driveCrater()  throws InterruptedException {
+        // Slide if left or right
+        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 10, 3.0);
+        switch (samplingPos) {
+            case LEFT:
+                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, 14, 4.0);
+                break;
+            case RIGHT:
+                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, -20, 4.0);
+                break;
+        }
+        // Drive forward
+        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 8, 4.0);
+        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, -8, 4.0);
+        // Switch back to the center
+        switch (samplingPos) {
+            case LEFT:
+                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, -14, 4.0);
+                break;
+            case RIGHT:
+                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, 20, 4.0);
+                break;
+        }
+        robot.mecTurn(robot.TURN_SPEED, 90, 3.0);
 
-        // Drive Forward about 2 foot (To crater)
-        robot.mecDriveVertical(robot.DRIVE_SPEED, 28.0, 5.0);
+        // Drive Forward about 4 foot (To wall)
+        robot.mecDriveVertical(robot.DRIVE_SPEED, 48.0, 3.0);
+        robot.mecTurn(robot.TURN_SPEED, 135, 3.0);
+        robot.mecDriveVertical(robot.DRIVE_SPEED, 36, 3.0);
+        robot.markerDown();
+        sleep (1000);
+        robot.markerUp();
     }
     public void driveDepot() throws InterruptedException {
 

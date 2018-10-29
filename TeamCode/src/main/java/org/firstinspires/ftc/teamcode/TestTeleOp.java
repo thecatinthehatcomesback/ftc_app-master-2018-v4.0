@@ -128,7 +128,7 @@ public class TestTeleOp extends LinearOpMode {
 
 
             // IMU Sensor
-            Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+            Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
             /**
              * ---   _________   ---
@@ -140,7 +140,7 @@ public class TestTeleOp extends LinearOpMode {
             telemetry.addData("Left Back Power:", "%.2f", leftBack);
             telemetry.addData("Right Back Power:", "%.2f", rightBack);
 
-            telemetry.addData("X Y Z: ", "%.1f, %.1f, %.1f", angles.firstAngle, angles.secondAngle, angles.thirdAngle);
+            telemetry.addData("Z Y X: ", "%.1f, %.1f, %.1f", angles.firstAngle, angles.secondAngle, angles.thirdAngle);
             telemetry.update();
         }
     }
