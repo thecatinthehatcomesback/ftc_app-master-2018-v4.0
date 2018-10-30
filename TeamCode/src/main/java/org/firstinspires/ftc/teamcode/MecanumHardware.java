@@ -430,8 +430,8 @@ public class MecanumHardware
         // Ensure that the opmode is still active
         if (opMode.opModeIsActive()) {
             int targetAngleZ;
-            targetAngleZ  = degrees;
-            boolean clockwiseTurn = (getCurrentAngle() > degrees);
+            targetAngleZ  = -degrees;
+            boolean clockwiseTurn = (getCurrentAngle() < degrees);
 
             // Don't use encoders.  We only use the gyro angle to turn
             runNoEncoders();

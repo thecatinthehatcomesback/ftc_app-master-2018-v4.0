@@ -20,7 +20,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Disabled
 @TeleOp(name="New TeleOp", group="CatTeleOp")
-
 public class NewTeleOp extends LinearOpMode {
 
     /* Declare OpMode members. */

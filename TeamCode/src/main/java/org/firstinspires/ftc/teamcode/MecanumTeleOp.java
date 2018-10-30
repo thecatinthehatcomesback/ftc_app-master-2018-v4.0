@@ -73,10 +73,10 @@ public class MecanumTeleOp extends LinearOpMode {
                 driveSpeed = 0.6;
             }
             // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-            leftFront  = -gamepad1.right_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x;
-            rightFront = -gamepad1.right_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x;
-            leftBack   = -gamepad1.right_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x;
-            rightBack  = -gamepad1.right_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x;
+            leftFront  = -gamepad1.right_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x;
+            rightFront = -gamepad1.right_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
+            leftBack   = -gamepad1.right_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
+            rightBack  = -gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
 
             /*
             leftFront = robot.limitRange(leftFront, -1.0, 1.0) * driveSpeed;

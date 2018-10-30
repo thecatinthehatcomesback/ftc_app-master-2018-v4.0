@@ -16,7 +16,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -165,12 +164,7 @@ public class MecAutonomous extends LinearOpMode {
 
 
         // Lower robot here
-        robot.tailMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.tailMotor.setTargetPosition(17345);
-        robot.tailMotor.setPower(1.0);
-        while(robot.tailMotor.isBusy()){
-            sleep(1);
-        }
+        //robot.lowerRobot();
         robot.mecDriveHorizontal(robot.DRIVE_SPEED,3.0,2.0);
         robot.mecDriveVertical(robot.DRIVE_SPEED,3.0,2.0);
         robot.mecDriveHorizontal(robot.DRIVE_SPEED,-3.0,2.0);
@@ -217,12 +211,12 @@ public class MecAutonomous extends LinearOpMode {
                 robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, 20, 4.0);
                 break;
         }
-        robot.mecTurn(robot.TURN_SPEED, 90, 3.0);
+        robot.mecTurn(robot.TURN_SPEED, -75, 3.0);
 
         // Drive Forward about 4 foot (To wall)
-        robot.mecDriveVertical(robot.DRIVE_SPEED, 48.0, 3.0);
-        robot.mecTurn(robot.TURN_SPEED, 135, 3.0);
-        robot.mecDriveVertical(robot.DRIVE_SPEED, 36, 3.0);
+        robot.mecDriveVertical(robot.DRIVE_SPEED, 44.0, 3.0);
+        robot.mecTurn(robot.TURN_SPEED, -135, 3.0);
+        robot.mecDriveVertical(robot.DRIVE_SPEED, 38, 3.0);
         robot.markerDown();
         sleep (1000);
         robot.markerUp();
@@ -237,12 +231,12 @@ public class MecAutonomous extends LinearOpMode {
         robot.markerUp();
         // Turn 45 towards the right crater
         if ((isParkRedCrater && isRedAlliance) || (!isRedAlliance && !isParkRedCrater)) {
-            robot.mecTurn(robot.TURN_SPEED, 41, 3.0);
-        } else{
             robot.mecTurn(robot.TURN_SPEED, -41, 3.0);
+        } else{
+            robot.mecTurn(robot.TURN_SPEED, 41, 3.0);
         }
 
         // Drive Backwards 6 feet (To crater)
-        robot.mecDriveVertical(robot.DRIVE_SPEED, -78.0, 8.0);
+        robot.mecDriveVertical(robot.DRIVE_SPEED, -85.0, 8.0);
     }
 }
