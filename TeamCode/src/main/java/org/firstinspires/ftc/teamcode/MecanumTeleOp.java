@@ -1,8 +1,8 @@
 /*
     MechanumTeleOp.java
 
-    A Linear opmode class to be our the teleop method
-    to try out mecanum drivetrain
+    A Linear opmode class to be our the TeleOp method
+    to use for the driver controlled period.
 
     This file is a modified version from the FTC SDK.
 

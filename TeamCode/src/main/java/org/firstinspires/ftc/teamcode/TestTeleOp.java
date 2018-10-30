@@ -1,8 +1,9 @@
 /*
-    testTeleOp.java
+    TestTeleOp.java
 
     A Linear opMode class to be our teleOp testing
-    method to try out mecanum drive train
+    method to try and solve our problems throughout
+    the year.
 
     This file is a modified version from the FTC SDK.
 

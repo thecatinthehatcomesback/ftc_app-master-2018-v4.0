@@ -1,12 +1,16 @@
 /**
- PotatoAutonomous.java
+ MecAutonomousBasic.java
 
  A Linear OpMode class to be an autonomous method for both Blue & Red where
- we pick which stone we are on with gamepad1 and knock the jewel off and
- place a glyph or two into the cryptobox.
+ we pick which side of the lander we are hanging off of with gamepad1 and
+ detect the gold with DogeCV, hit the right element, place our team marker
+ in our depot and park in either crater according to what we say using gamepad1
+ at the beginning of the match.
 
- Potato is written for use with the mecanum intake and linear slides
- used for the North Super Regionals.
+ MecBasic is written to use the most basic approach to our autonomous route
+ with the help of mechanical sorting intake and a servo to drop our team marker
+ off in the depot.  This autonomous is used for our first qualifier this year
+ (November 10, 2018).
 
  This file is a modified version from the FTC SDK.
 
@@ -19,8 +23,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="Mec Autonomous", group="CatAuto")
-public class MecAutonomous extends LinearOpMode {
+@Autonomous(name="Basic Mec Autonomous", group="CatAuto")
+public class MecAutonomousBasic extends LinearOpMode {
 
     /* Declare OpMode members. */
     MecanumHardware robot = new MecanumHardware();      // Use our mecanum hardware

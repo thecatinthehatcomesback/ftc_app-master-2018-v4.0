@@ -1,9 +1,9 @@
 /*
-    GruviaTeleOp.java
+    NewTeleOp.java
 
-    A Linear opmode class to be our main teleop method
-    This was used with the gripper for the 2 qualifying tournaments
-     It has now been replaced when we went to the mecanum intake.
+    TeleOp mode for our six wheel drive train.
+    Currently not in use since we are using a
+    mecanum drive train.
 
     This file is a modified version from the FTC SDK.
 

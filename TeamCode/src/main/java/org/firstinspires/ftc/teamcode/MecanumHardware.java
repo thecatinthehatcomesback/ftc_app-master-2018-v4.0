@@ -3,7 +3,7 @@
 
         An "hardware" class intended to contain common code for accessing the hardware
         This is a modified (stripped down) version of HardwareCatBot to
-        be used with Mecanum drivetrain.
+        be used with mecanum drive train.
 
         This file is a HEAVILY modified version from the FTC SDK.
 

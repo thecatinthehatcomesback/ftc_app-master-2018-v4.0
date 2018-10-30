@@ -41,15 +41,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 /**
  * This is NOT an opmode.
  *
- * This class can be used to define all the specific hardware for a single robot.
+ * This class can be used to define all vision coding we use.
  * In this case that robot is the Cat in the Hat robot for 2018-2019
  *
- * This hardware class assumes the following device names have been configured on the robot:
- * Note:  All names are lower case and some have underscores between words.
- *
- * Motor channel:  Left  drive motor:        "left_rear"  & "left_front"
- * Motor channel:  Right drive motor:        "right_rear" & "right_front"
- * And so on...
  */
 public class CatVisionHardware
 {

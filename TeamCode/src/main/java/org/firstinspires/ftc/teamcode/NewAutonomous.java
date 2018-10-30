@@ -1,12 +1,8 @@
 /**
- PotatoAutonomous.java
+ NewAutonomous.java
 
- A Linear OpMode class to be an autonomous method for both Blue & Red where
- we pick which stone we are on with gamepad1 and knock the jewel off and
- place a glyph or two into the cryptobox.
-
- Potato is written for use with the mecanum intake and linear slides
- used for the North Super Regionals.
+ A Linear OpMode class to be an autonomous method for six wheel drive
+ train.
 
  This file is a modified version from the FTC SDK.
 
