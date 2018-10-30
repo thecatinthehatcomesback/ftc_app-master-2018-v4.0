@@ -237,6 +237,6 @@ public class MecAutonomous extends LinearOpMode {
         }
 
         // Drive Backwards 6 feet (To crater)
-        robot.mecDriveVertical(robot.DRIVE_SPEED, -85.0, 8.0);
+        robot.mecDriveVertical(robot.DRIVE_SPEED, -87.0, 8.0);
     }
 }
