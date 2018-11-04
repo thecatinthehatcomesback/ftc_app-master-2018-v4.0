@@ -17,6 +17,7 @@ import android.util.Log;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -80,6 +81,11 @@ public class MecanumHardware
     public Servo    identityRelease  = null;
     public Servo    hooky            = null;
 
+    public CRServo  intakeServo      = null;
+    public CRServo  extenderServo    = null;
+
+    // Two Vex motors = Continuous Servos
+
 
     /* local OpMode members. */
     HardwareMap hwMap           = null;
@@ -107,6 +113,8 @@ public class MecanumHardware
         // Define and Initialize Servos //
         identityRelease  = hwMap.servo.get("identity_release");
         hooky            = hwMap.servo.get("hook_release");
+        intakeServo      = hwMap.crservo.get("intakey");
+        extenderServo    = hwMap.crservo.get("extendey");
 
         // Define motor direction //
         leftFrontMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -336,7 +344,7 @@ public class MecanumHardware
         }
     }
     public void advMecDrive(double power, double vectorDistance,
-                         double vectorAng, double timeoutS) throws InterruptedException {
+                            double vectorAng, double timeoutS) throws InterruptedException {
         /**
          * In this mecanum drive method, we are trying to have the robot
          * drive at an angle while the face of the robot remains pointed
@@ -358,7 +366,7 @@ public class MecanumHardware
 
         int distanceToTravel = 0;
 
-        double SF = findScaleFactor(leftFront, rightFront, leftBack, rightBack);
+        double SF = findScalor(leftFront, rightFront, leftBack, rightBack);
         leftFront  = leftFront  * SF * power;
         rightFront = rightFront * SF * power;
         leftBack   = leftBack   * SF * power;
@@ -513,8 +521,8 @@ public class MecanumHardware
     public double limitRange(double number, double min, double max) {
         return Math.min(Math.max(number, min), max);
     }
-    public double findScaleFactor(double leftFrontValue, double rightFrontValue,
-                                  double leftBackValue, double rightBackValue) {
+    public double findScalor(double leftFrontValue, double rightFrontValue,
+                             double leftBackValue, double rightBackValue) {
         /*
         * Will scale down our power numbers if they are
         * greater than 1.0 so that we continue the set
@@ -524,12 +532,12 @@ public class MecanumHardware
 
         /****
          * Look at all motor values
-         * Find the highest absolute value
+         * Find the highest absolute value (the "scalor")
          * If the highest value is not more than 1.0, we don't need to change the values
          * But if it is higher than 1.0, we need to find the scale to get that value down to 1.0
          * Finally, we pass out the scale factor so that we can scale each motor down
          */
-        double ultAbs = 0;
+        double scalor = 0;
         double scaleFactor;
 
         double[] values;
@@ -541,15 +549,15 @@ public class MecanumHardware
 
         // Find highest value
         for(int i = 0; i+1 < values.length; i++){
-            if(values[i] > ultAbs){
-                ultAbs = values[i];
+            if(values[i] > scalor){
+                scalor = values[i];
             }
         }
 
         // If the highest absolute value is over 1.0, we need to get to work!  Otherwise, we done here...
-        if (ultAbs > 1.0) {
+        if (scalor > 1.0) {
             // Get the reciprocal
-            scaleFactor = 1.0 / ultAbs;
+            scaleFactor = 1.0 / scalor;
         } else {
             // Set to 1 so that we don't change anything we don'thave to...
             scaleFactor = 1.0;
@@ -578,10 +586,7 @@ public class MecanumHardware
             robotWait(1.0);
         }
 
-        // Slide out left aways
-
-
-        // Pull tail back into the robot
+        // Pull tail back into the robot (not there yet...)
 
     }
 

@@ -85,7 +85,7 @@ public class MecanumTeleOp extends LinearOpMode {
             rightBack = robot.limitRange(rightBack, -1.0, 1.0) * driveSpeed;
             */
 
-            SF = robot.findScaleFactor(leftFront, rightFront, leftBack, rightBack);
+            SF = robot.findScalor(leftFront, rightFront, leftBack, rightBack);
             leftFront  = leftFront  * SF * driveSpeed;
             rightFront = rightFront * SF * driveSpeed;
             leftBack   = leftBack   * SF * driveSpeed;

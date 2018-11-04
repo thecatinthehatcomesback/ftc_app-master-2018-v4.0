@@ -36,7 +36,7 @@ public class MecAutonomousBasic extends LinearOpMode {
     private boolean isCraterSide = true;
     private boolean isParkRedCrater = true;
 
-    private CatVisionHardware.samplingPos samplingPos = CatVisionHardware.samplingPos.CENTER;
+    private CatVisionHardware.samplingPos samplingPos = CatVisionHardware.samplingPos.RIGHT;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -174,7 +174,7 @@ public class MecAutonomousBasic extends LinearOpMode {
         robot.mecDriveHorizontal(robot.DRIVE_SPEED,-3.0,2.0);
 
         // Find and store the values of the sampling
-       samplingPos = eyes.findGoldPos();
+        samplingPos = eyes.findGoldPos();
 
         //Delay the amount we selected
         robot.robotWait(timeDelay);
@@ -204,8 +204,8 @@ public class MecAutonomousBasic extends LinearOpMode {
                 break;
         }
         // Drive forward
-        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 8, 4.0);
-        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, -8, 4.0);
+        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 12, 4.0);
+        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, -12, 4.0);
         // Switch back to the center
         switch (samplingPos) {
             case LEFT:
@@ -218,8 +218,8 @@ public class MecAutonomousBasic extends LinearOpMode {
         robot.mecTurn(robot.TURN_SPEED, -75, 3.0);
 
         // Drive Forward about 4 foot (To wall)
-        robot.mecDriveVertical(robot.DRIVE_SPEED, 44.0, 3.0);
-        robot.mecTurn(robot.TURN_SPEED, -135, 3.0);
+        robot.mecDriveVertical(robot.DRIVE_SPEED, 49.0, 3.0);
+        robot.mecTurn(robot.TURN_SPEED, -127, 3.0);
         robot.mecDriveVertical(robot.DRIVE_SPEED, 38, 3.0);
         robot.markerDown();
         sleep (1000);
@@ -227,8 +227,32 @@ public class MecAutonomousBasic extends LinearOpMode {
     }
     public void driveDepot() throws InterruptedException {
 
+        // Slide if left or right
+        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 10, 3.0);
+        switch (samplingPos) {
+            case LEFT:
+                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, 14, 4.0);
+                break;
+            case RIGHT:
+                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, -20, 4.0);
+                break;
+        }
+        // Drive forward
+        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 34, 4.0);
+
+        // Switch back to the center
+        switch (samplingPos) {
+            case LEFT:
+                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, -14, 4.0);
+                break;
+            case RIGHT:
+                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, 20, 4.0);
+                break;
+        }
+
+
         // Drive 4 foot and drop mineral off
-        robot.mecDriveVertical(robot.DRIVE_SPEED, 58.0, 6.0);
+        robot.mecDriveVertical(robot.DRIVE_SPEED, 16, 3.0);
         // Drop Marker
         robot.markerDown();
         sleep(1000);
