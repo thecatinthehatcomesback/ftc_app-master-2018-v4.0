@@ -514,7 +514,7 @@ public class MecanumHardware
      */
     public int[] tailPos = new int[3]; {
         /**
-         * Each of the encoder ticks that we need to reach the
+         * Each of the encoder ticks that we need to reach the desired heights
          */
 
         //  All the way down
