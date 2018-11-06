@@ -463,7 +463,7 @@ public class HardwareCatBot
                     // Just drive straight...
                     drive(leftSpeed, rightSpeed);
 
-                    //// TODO: 2/7/2018 CHANGED THIS FROM 88 to 90 because the imu changed today...
+                    //// CHANGED THIS FROM 88 to 90 because the imu changed today...
                     // Just cut the crap... STOP AT AN ABSOLUTE!!!
                     if (angles.thirdAngle <= 91) {
                         keepDriving = false;
@@ -862,12 +862,11 @@ public class HardwareCatBot
      * ---   \/ \/ \/ \/ \/   ---
      */
     public double spitCenterAngleOut(int dogeCVinput) {
-        //// TODO: 3/21/2018 Make it have a parameter to spit an angle for a specific column
         double dogeAngle = 0;
 
         return dogeAngle = (dogeCVinput - 400.0)/800.0;
     }
-    /*
+    /**
     public double cryptoboxAngle(CryptoboxDetector cryptoboxDetector, SOCKmission column) {
         double Angle = 0;
         if (cryptoboxDetector.isColumnDetected()) {

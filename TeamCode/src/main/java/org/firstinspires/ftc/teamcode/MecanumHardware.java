@@ -508,6 +508,37 @@ public class MecanumHardware
 
 
     /**
+     * ---   ____________   ---
+     * ---   Tail Methods   ---
+     * ---   \/ \/ \/ \/    ---
+     */
+    public int[] tailPos = new int[3]; {
+        /**
+         * Each of the encoder ticks that we need to reach the
+         */
+
+        //  All the way down
+        tailPos[0] = 0;
+        //  Out of hook
+        tailPos[1] = 100000000;
+        //  Way high out of hook
+        tailPos[2] = 111000000;
+
+    };
+    public void retractTail() {
+        /**
+         * Pull tail inside the robot/reattach to the lander
+         */
+        tailMotor.setTargetPosition(tailPos[0]);
+    }
+    public void extendTail() {
+        /**
+         * Extend tail and land the robot
+         */
+        tailMotor.setTargetPosition(tailPos[1]);
+    }
+
+    /**
      * ---   ______________   ---
      * ---   Common Methods   ---
      * ---   \/ \/ \/ \/ \/   ---

@@ -123,8 +123,11 @@ public class TestTeleOp extends LinearOpMode {
                 robot.hookClamp();
             }
             if (gamepad2.dpad_right) {
-                robot.hookClamp();
+                robot.hookRelease();
             }
+
+            // Tail Control
+            robot.tailMotor.setPower(-gamepad2.right_stick_y);
 
 
 
@@ -140,7 +143,7 @@ public class TestTeleOp extends LinearOpMode {
             telemetry.addData("Right Front Power:", "%.2f", rightFront);
             telemetry.addData("Left Back Power:", "%.2f", leftBack);
             telemetry.addData("Right Back Power:", "%.2f", rightBack);
-
+            telemetry.addData("Tail Motor Position:", robot.tailMotor.getCurrentPosition());
             telemetry.addData("Z Y X: ", "%.1f, %.1f, %.1f", angles.firstAngle, angles.secondAngle, angles.thirdAngle);
             telemetry.update();
         }

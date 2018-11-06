@@ -21,7 +21,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class MecanumTeleOp extends LinearOpMode {
 
     /* Declare OpMode members. */
-    private ElapsedTime runtime = new ElapsedTime();
+    private ElapsedTime elapsedGameTime = new ElapsedTime();
 
     /* Declare OpMode members. */
     MecanumHardware robot;  // Use the mecanum class created for the hardware
@@ -47,12 +47,12 @@ public class MecanumTeleOp extends LinearOpMode {
         waitForStart();
 
         // Go!
-        runtime.reset();
+        elapsedGameTime.reset();
         double driveSpeed;
-        double leftFront = 0;
-        double rightFront = 0;
-        double leftBack = 0;
-        double rightBack = 0;
+        double leftFront;
+        double rightFront;
+        double leftBack;
+        double rightBack;
         double SF;
 
         // run until the end of the match (driver presses STOP)
@@ -64,7 +64,7 @@ public class MecanumTeleOp extends LinearOpMode {
              * ---   \/ \/ \/ \/ \/ \/   ---
              */
 
-            //  ---  SPEED BOOST!!!  --- //
+            // Speed adjustments
             if (gamepad1.left_bumper) {
                 driveSpeed = 1;
             } else if (gamepad1.right_bumper) {
@@ -72,20 +72,15 @@ public class MecanumTeleOp extends LinearOpMode {
             } else {
                 driveSpeed = 0.6;
             }
-            // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
+            // Input for drive train
             leftFront  = -gamepad1.right_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x;
             rightFront = -gamepad1.right_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
             leftBack   = -gamepad1.right_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
             rightBack  = -gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
 
-            /*
-            leftFront = robot.limitRange(leftFront, -1.0, 1.0) * driveSpeed;
-            rightFront = robot.limitRange(rightFront, -1.0, 1.0) * driveSpeed;
-            leftBack = robot.limitRange(leftBack, -1.0, 1.0) * driveSpeed;
-            rightBack = robot.limitRange(rightBack, -1.0, 1.0) * driveSpeed;
-            */
-
+            // Calculate the scale factor to reduce the powers
             SF = robot.findScalor(leftFront, rightFront, leftBack, rightBack);
+            // Set powers to each drive motor
             leftFront  = leftFront  * SF * driveSpeed;
             rightFront = rightFront * SF * driveSpeed;
             leftBack   = leftBack   * SF * driveSpeed;
@@ -120,6 +115,10 @@ public class MecanumTeleOp extends LinearOpMode {
 
             robot.tailMotor.setPower(-gamepad2.right_stick_y);
 
+            if (elapsedGameTime.seconds() > 100) {
+                robot.extendTail();
+            }
+
             /**
              * ---   _________   ---
              * ---   TELEMETRY   ---
@@ -129,7 +128,7 @@ public class MecanumTeleOp extends LinearOpMode {
             telemetry.addData("Right Front Power:", "%.2f", rightFront);
             telemetry.addData("Left Back Power:", "%.2f", leftBack);
             telemetry.addData("Right Back Power:", "%.2f", rightBack);
-            telemetry.addData("tail encoder:",robot.tailMotor.getCurrentPosition());
+            telemetry.addData("Tail Encoder Position:", robot.tailMotor.getCurrentPosition());
             telemetry.update();
         }
     }
