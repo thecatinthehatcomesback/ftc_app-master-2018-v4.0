@@ -90,6 +90,9 @@ public class MecanumTeleOp extends LinearOpMode {
             // drive //
             robot.drive(leftFront, rightFront, leftBack, rightBack);
 
+            // Driver 1 Tail Control
+            robot.tailMotor.setPower(gamepad1.right_trigger -gamepad1.left_trigger);
+
 
             /**
              * ---   _________________   ---
@@ -97,24 +100,27 @@ public class MecanumTeleOp extends LinearOpMode {
              * ---   \/ \/ \/ \/ \/ \/   ---
              */
 
-            // Identifier Servo control
-            if (gamepad2.dpad_up) {
-                robot.markerUp();
+            // TODO: 11/5/2018 Add buttons and sticks for the arm and intake...
+
+            // Tail control  for Driver 2
+            if (gamepad2.y) {
+                robot.retractTail();
             }
-            if (gamepad2.dpad_down) {
-                robot.markerDown();
+            if (gamepad2.x) {
+                robot.extendTail();
             }
 
-            // Hook Controls
-            if (gamepad2.dpad_left) {
-                robot.hookClamp();
-            }
-            if (gamepad2.dpad_right) {
-                robot.hookRelease();
-            }
+            // Intake Spinning Controls
+            robot.intakeServo.setPower(gamepad2.right_trigger*0.8 - gamepad2.left_trigger*0.8);
 
-            robot.tailMotor.setPower(-gamepad2.right_stick_y);
+            //**  Arm controls **//
+            // Lower/raise arm
+            robot.armMotor.setPower(-gamepad2.right_stick_y);
+            // Extend/retract arm
+            robot.extenderServo.setPower(gamepad2.left_stick_x*0.8);
 
+
+            // Driver help
             if (elapsedGameTime.seconds() > 100) {
                 robot.extendTail();
             }

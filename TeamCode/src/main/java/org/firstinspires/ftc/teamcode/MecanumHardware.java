@@ -77,9 +77,9 @@ public class MecanumHardware
     public DcMotor  leftBackMotor    = null;
     public DcMotor  rightBackMotor   = null;
     public DcMotor  tailMotor        = null;
+    public DcMotor  armMotor         = null;
 
     public Servo    identityRelease  = null;
-    public Servo    hooky            = null;
 
     public CRServo  intakeServo      = null;
     public CRServo  extenderServo    = null;
@@ -107,12 +107,12 @@ public class MecanumHardware
         // Define and Initialize Motors //
         leftFrontMotor   = hwMap.dcMotor.get("left_front_motor");
         rightFrontMotor  = hwMap.dcMotor.get("right_front_motor");
-        leftBackMotor    = hwMap.dcMotor.get("left_back_motor");
-        rightBackMotor   = hwMap.dcMotor.get("right_back_motor");
+        leftBackMotor    = hwMap.dcMotor.get("left_rear_motor");
+        rightBackMotor   = hwMap.dcMotor.get("right_rear_motor");
         tailMotor        = hwMap.dcMotor.get("tail_motor");
+        armMotor         = hwMap.dcMotor.get("arm_motor");
         // Define and Initialize Servos //
         identityRelease  = hwMap.servo.get("identity_release");
-        hooky            = hwMap.servo.get("hook_release");
         intakeServo      = hwMap.crservo.get("intakey");
         extenderServo    = hwMap.crservo.get("extendey");
 
@@ -121,6 +121,7 @@ public class MecanumHardware
         rightFrontMotor.setDirection(DcMotor.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotor.Direction.FORWARD);
         rightBackMotor.setDirection(DcMotor.Direction.REVERSE);
+        tailMotor.setDirection(DcMotor.Direction.FORWARD);
         tailMotor.setDirection(DcMotor.Direction.FORWARD);
         // Set motor modes //
         runNoEncoders();
@@ -141,17 +142,11 @@ public class MecanumHardware
      * ---   Servo control methods   ---
      * ---   \/ \/ \/ \/ \/ \/ \/    ---
      */
-    public void hookClamp() {
-        hooky.setPosition(0.0);
+    public void markerRelease() {
+        // Set the marker out
     }
-    public void hookRelease() {
-        hooky.setPosition(0.5);
-    }
-    public void markerUp() {
-        identityRelease.setPosition(0.5);
-    }
-    public void markerDown() {
-        identityRelease.setPosition(0.0);
+    public void markerIn() {
+        // Set the marker servo back in
     }
 
     /**
@@ -520,9 +515,9 @@ public class MecanumHardware
         //  All the way down
         tailPos[0] = 0;
         //  Out of hook
-        tailPos[1] = 100000000;
+        tailPos[1] = 8300;
         //  Way high out of hook
-        tailPos[2] = 111000000;
+        tailPos[2] = 8400;
 
     };
     public void retractTail() {

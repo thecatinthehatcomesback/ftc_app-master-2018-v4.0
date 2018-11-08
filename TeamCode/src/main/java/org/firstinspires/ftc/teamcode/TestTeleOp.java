@@ -110,22 +110,6 @@ public class TestTeleOp extends LinearOpMode {
              * ---   \/ \/ \/ \/ \/ \/   ---
              */
 
-            // Identifier Servo control
-            if (gamepad2.dpad_up) {
-                robot.markerUp();
-            }
-            if (gamepad2.dpad_down) {
-                robot.markerDown();
-            }
-
-            // Hook Controls
-            if (gamepad2.dpad_left) {
-                robot.hookClamp();
-            }
-            if (gamepad2.dpad_right) {
-                robot.hookRelease();
-            }
-
             // Tail Control
             robot.tailMotor.setPower(-gamepad2.right_stick_y);
 

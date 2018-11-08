@@ -66,7 +66,6 @@ public class MecAutonomousBasic extends LinearOpMode {
                 robot.rightBackMotor.getCurrentPosition());
         telemetry.update();
 
-        robot.markerUp();
         // After init is pushed but before Start we can change the delay using dpad up/down //
         delayTimer.reset();
         // Runs a loop to change certain settings while we wait to start
@@ -229,9 +228,9 @@ public class MecAutonomousBasic extends LinearOpMode {
         robot.mecDriveVertical(robot.DRIVE_SPEED, 49.0, 3.0);
         robot.mecTurn(robot.TURN_SPEED, -127, 3.0);
         robot.mecDriveVertical(robot.DRIVE_SPEED, 38, 3.0);
-        robot.markerDown();
+        //robot.markerDown();
         robot.robotWait (1.0);
-        robot.markerUp();
+        //robot.markerUp();
         // Turn 45 towards the right crater
         if ((isParkRedCrater && isRedAlliance) || (!isRedAlliance && !isParkRedCrater)) {
             robot.mecTurn(robot.TURN_SPEED, -134, 3.0);
@@ -275,9 +274,9 @@ public class MecAutonomousBasic extends LinearOpMode {
         // Drive 4 foot and drop mineral off
         robot.mecDriveVertical(robot.DRIVE_SPEED, 16, 3.0);
         // Drop Marker
-        robot.markerDown();
+        //robot.markerDown();
         robot.robotWait(1.0);
-        robot.markerUp();
+        //robot.markerUp();
         // Turn 45 towards the right crater
         if ((isParkRedCrater && isRedAlliance) || (!isRedAlliance && !isParkRedCrater)) {
             robot.mecTurn(robot.TURN_SPEED, -41, 3.0);
