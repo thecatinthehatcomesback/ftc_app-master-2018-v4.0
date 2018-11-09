@@ -5,7 +5,6 @@
  both old and new.  We constantly edit this, taking
  out and adding in code.  This is never the same.
 
-
  This file is a modified version from the FTC SDK.
 
  Modifications by FTC Team #10273 Cat in the Hat Comes Back
@@ -60,22 +59,16 @@ public class MecTesterAutonomous extends LinearOpMode {
          *
          \*/
 
-        while (opModeIsActive()) {
+        robot.mecTurn(MecanumHardware.TURN_SPEED, 90, 3);
 
-            eyes.loop();
-            telemetry.addData("X Pos: ", eyes.detector.getXPosition());
-            telemetry.addData("Pos:", eyes.findGoldPos().toString());
-            telemetry.update();
-        }
+        robot.mecTurn(MecanumHardware.TURN_SPEED, -90, 3);
 
 
 
         /**
          * What we plan to test in this autonomous:
          *
-         * Test the new mecDriveVertical...  Make sure it is working as planned             <3
-         * Test the new mecDriveHorizontal...  Make sure it is working as planned           <3
-         * Test the new mecTurn...  Get the angle + and - correct orientations              <3
+         *
          */
     }
 }

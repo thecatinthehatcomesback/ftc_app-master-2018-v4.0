@@ -167,7 +167,7 @@ public class MecAutonomousBasic extends LinearOpMode {
 
 
         // Lower robot here
-        //robot.lowerRobot();
+        robot.lowerRobot();
         robot.mecDriveHorizontal(robot.DRIVE_SPEED,3.0,2.0);
         robot.mecDriveVertical(robot.DRIVE_SPEED,3.0,2.0);
         robot.mecDriveHorizontal(robot.DRIVE_SPEED,-3.0,2.0);
@@ -211,7 +211,7 @@ public class MecAutonomousBasic extends LinearOpMode {
         }
         // Drive forward
         robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 12, 4.0);
-        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, -12, 4.0);
+        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, -10, 4.0);
         // Switch back to the center
         switch (samplingPos) {
             case LEFT:
@@ -227,21 +227,26 @@ public class MecAutonomousBasic extends LinearOpMode {
         // Drive Forward about 4 foot (To wall)
         robot.mecDriveVertical(robot.DRIVE_SPEED, 49.0, 3.0);
         robot.mecTurn(robot.TURN_SPEED, -127, 3.0);
-        robot.mecDriveVertical(robot.DRIVE_SPEED, 38, 3.0);
-        //robot.markerDown();
-        robot.robotWait (1.0);
-        //robot.markerUp();
+        robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED,-4,2);
+        robot.mecDriveVertical(robot.DRIVE_SPEED, 43, 3.0);
+        robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED,3, 2);
+        robot.markerRelease();
+        robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED,3, 2);
+        robot.robotWait (0.7);
+        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED,-10,3);
+        robot.markerIn();
+        robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED,-6,2);
         // Turn 45 towards the right crater
         if ((isParkRedCrater && isRedAlliance) || (!isRedAlliance && !isParkRedCrater)) {
             robot.mecTurn(robot.TURN_SPEED, -134, 3.0);
         } else{
-            robot.mecTurn(robot.TURN_SPEED, 41, 3.0);
+            robot.mecTurn(robot.TURN_SPEED, -41, 3.0);
         }
 
         // Drive Backwards 6 feet (To crater)
-        robot.mecDriveVertical(robot.DRIVE_SPEED, -87.0, 8.0);
+        robot.mecDriveVertical(robot.DRIVE_SPEED, -64.0, 8.0);
         robot.robotWait( 0.5);
-        robot.mecDriveVertical(robot.CREEP_SPEED, 45,3.0);
+        robot.mecDriveVertical(robot.CREEP_SPEED, -4,3.0);
     }
     public void driveDepot() throws InterruptedException {
 
@@ -274,9 +279,9 @@ public class MecAutonomousBasic extends LinearOpMode {
         // Drive 4 foot and drop mineral off
         robot.mecDriveVertical(robot.DRIVE_SPEED, 16, 3.0);
         // Drop Marker
-        //robot.markerDown();
+        robot.markerRelease();
         robot.robotWait(1.0);
-        //robot.markerUp();
+        robot.markerIn();
         // Turn 45 towards the right crater
         if ((isParkRedCrater && isRedAlliance) || (!isRedAlliance && !isParkRedCrater)) {
             robot.mecTurn(robot.TURN_SPEED, -41, 3.0);

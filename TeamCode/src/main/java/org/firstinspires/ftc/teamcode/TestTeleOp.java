@@ -61,6 +61,7 @@ public class TestTeleOp extends LinearOpMode {
         double leftBack = 0;
         double rightBack = 0;
         double SF;
+        double markerPos = 0;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -113,7 +114,14 @@ public class TestTeleOp extends LinearOpMode {
             // Tail Control
             robot.tailMotor.setPower(-gamepad2.right_stick_y);
 
-
+            // marker
+            if(gamepad1.b){
+                markerPos += 0.005;
+            }
+            if(gamepad1.x) {
+                markerPos -= 0.005;
+            }
+            robot.markerServo.setPosition(markerPos);
 
             // IMU Sensor
             Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -129,6 +137,7 @@ public class TestTeleOp extends LinearOpMode {
             telemetry.addData("Right Back Power:", "%.2f", rightBack);
             telemetry.addData("Tail Motor Position:", robot.tailMotor.getCurrentPosition());
             telemetry.addData("Z Y X: ", "%.1f, %.1f, %.1f", angles.firstAngle, angles.secondAngle, angles.thirdAngle);
+            telemetry.addData("Marker Pos", " %.2f",robot.markerServo.getPosition());
             telemetry.update();
         }
     }

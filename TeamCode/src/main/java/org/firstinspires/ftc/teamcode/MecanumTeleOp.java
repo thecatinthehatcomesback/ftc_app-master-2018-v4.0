@@ -6,7 +6,7 @@
 
     This file is a modified version from the FTC SDK.
 
-    Modifications by FTC Team #10273 Cat in the Hat Comes Back
+    Heavy Modifications by FTC Team #10273 Cat in the Hat Comes Back
 */
 
 package org.firstinspires.ftc.teamcode;
@@ -73,10 +73,14 @@ public class MecanumTeleOp extends LinearOpMode {
                 driveSpeed = 0.6;
             }
             // Input for drive train
-            leftFront  = -gamepad1.right_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x;
-            rightFront = -gamepad1.right_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
-            leftBack   = -gamepad1.right_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
-            rightBack  = -gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
+//            leftFront  = -gamepad1.right_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x;
+//            rightFront = -gamepad1.right_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
+//            leftBack   = -gamepad1.right_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
+//            rightBack  = -gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
+            leftFront  = gamepad1.right_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
+            rightFront = gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
+            leftBack   = gamepad1.right_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x;
+            rightBack  = gamepad1.right_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
 
             // Calculate the scale factor to reduce the powers
             SF = robot.findScalor(leftFront, rightFront, leftBack, rightBack);
@@ -91,7 +95,7 @@ public class MecanumTeleOp extends LinearOpMode {
             robot.drive(leftFront, rightFront, leftBack, rightBack);
 
             // Driver 1 Tail Control
-            robot.tailMotor.setPower(gamepad1.right_trigger -gamepad1.left_trigger);
+            robot.tailMotor.setPower(gamepad1.left_trigger -gamepad1.right_trigger);
 
 
             /**
@@ -103,15 +107,17 @@ public class MecanumTeleOp extends LinearOpMode {
             // TODO: 11/5/2018 Add buttons and sticks for the arm and intake...
 
             // Tail control  for Driver 2
+            /*
             if (gamepad2.y) {
                 robot.retractTail();
             }
             if (gamepad2.x) {
                 robot.extendTail();
             }
+            */
 
             // Intake Spinning Controls
-            robot.intakeServo.setPower(gamepad2.right_trigger*0.8 - gamepad2.left_trigger*0.8);
+            robot.intakeServo.setPower(gamepad2.right_trigger*0.87 - gamepad2.left_trigger*0.87);
 
             //**  Arm controls **//
             // Lower/raise arm
@@ -135,6 +141,7 @@ public class MecanumTeleOp extends LinearOpMode {
             telemetry.addData("Left Back Power:", "%.2f", leftBack);
             telemetry.addData("Right Back Power:", "%.2f", rightBack);
             telemetry.addData("Tail Encoder Position:", robot.tailMotor.getCurrentPosition());
+            telemetry.addData("Intake Speed:", robot.intakeServo.getPower());
             telemetry.update();
         }
     }

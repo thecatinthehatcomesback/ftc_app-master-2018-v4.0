@@ -19,6 +19,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -55,8 +56,12 @@ public class MecanumHardware
     static final double     DRIVE_SPEED             = 0.45;
     static final double     HYPER_SPEED             = 0.7;
     static final double     CHILL_SPEED             = 0.3;
-    static final double     CREEP_SPEED             = 0.2;
+    static final double     CREEP_SPEED             = 0.1;
     static final double     TURN_SPEED              = 0.35;
+
+    // Marker Servo
+    static final double     MARKER_IN               = 0.55;
+    static final double     MARKER_OUT              = 0.27;
 
     // Enums!
     enum huh {
@@ -83,6 +88,7 @@ public class MecanumHardware
 
     public CRServo  intakeServo      = null;
     public CRServo  extenderServo    = null;
+    public Servo    markerServo      = null;
 
     // Two Vex motors = Continuous Servos
 
@@ -115,6 +121,7 @@ public class MecanumHardware
         identityRelease  = hwMap.servo.get("identity_release");
         intakeServo      = hwMap.crservo.get("intakey");
         extenderServo    = hwMap.crservo.get("extendey");
+        markerServo      = hwMap.servo.get("markey");
 
         // Define motor direction //
         leftFrontMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -123,6 +130,7 @@ public class MecanumHardware
         rightBackMotor.setDirection(DcMotor.Direction.REVERSE);
         tailMotor.setDirection(DcMotor.Direction.FORWARD);
         tailMotor.setDirection(DcMotor.Direction.FORWARD);
+        intakeServo.setDirection(DcMotorSimple.Direction.FORWARD);
         // Set motor modes //
         runNoEncoders();
         tailMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -133,6 +141,8 @@ public class MecanumHardware
         leftBackMotor.setPower(0);
         rightBackMotor.setPower(0);
         tailMotor.setPower(0);
+
+        markerServo.setPosition(MARKER_IN);
     }
 
 
@@ -144,9 +154,11 @@ public class MecanumHardware
      */
     public void markerRelease() {
         // Set the marker out
+        markerServo.setPosition(MARKER_OUT);
     }
     public void markerIn() {
         // Set the marker servo back in
+        markerServo.setPosition(MARKER_IN);
     }
 
     /**
@@ -455,18 +467,11 @@ public class MecanumHardware
             }
             // keep looping while we are still active, and there is time left, and both motors are running.
             int wrapAdjust = 0;
-            boolean lastWasNegative = getCurrentAngle() < 0;
             while (opMode.opModeIsActive() &&
                     (runtime.seconds() < timeoutS)) {
 
                 int zVal = getCurrentAngle();
 
-                /*if ((prevGyro < 0) && (zVal > 0) && (CounterclockwiseTurn)) {
-                    wrapAdjust += 360;
-                }
-                if ((prevGyro > 0) && (zVal < 0) && (!CounterclockwiseTurn)) {
-                    wrapAdjust -= 360;
-                }*/
                 if (prevGyro != zVal) {
 
                     prevGyro = zVal;
@@ -605,7 +610,7 @@ public class MecanumHardware
 
         tailMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         // Get motor down
-        tailMotor.setTargetPosition(17345);
+        tailMotor.setTargetPosition(8500);
         tailMotor.setPower(1.0);
         // Wait until the robot is completely finished
         while(tailMotor.isBusy()){
