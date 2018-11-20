@@ -2,7 +2,7 @@
       MechanumHardware.java
 
         An "hardware" class intended to contain common code for accessing the hardware
-        This is a modified (stripped down) version of HardwareCatBot to
+        This is a modified (stripped down) version of CatBotHardware to
         be used with mecanum drive train.
 
         This file is a HEAVILY modified version from the FTC SDK.
@@ -22,6 +22,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
@@ -45,7 +46,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
  * Motor channel:  Right drive motor:        "right_rear" & "right_front"
  * And so on...
  */
-public class MecanumHardware
+public class CatMecanumHardware
 {
     // Wheel measurements
     static final double     COUNTS_PER_MOTOR_REV    = 537.6;    // Accurate for a NeveRest Orbital 20
@@ -77,6 +78,7 @@ public class MecanumHardware
 
 
     /* Public OpMode members. */
+    // Motors
     public DcMotor  leftFrontMotor   = null;
     public DcMotor  rightFrontMotor  = null;
     public DcMotor  leftBackMotor    = null;
@@ -85,20 +87,22 @@ public class MecanumHardware
     public DcMotor  armMotor         = null;
 
     public Servo    identityRelease  = null;
-
-    public CRServo  intakeServo      = null;
-    public CRServo  extenderServo    = null;
     public Servo    markerServo      = null;
 
     // Two Vex motors = Continuous Servos
+    public CRServo  intakeServo      = null;
+    public CRServo  extenderServo    = null;
 
+
+    // Sensors
+    public UltrasonicSensor     landerSeer  = null;
 
     /* local OpMode members. */
     HardwareMap hwMap           = null;
     LinearOpMode opMode         = null;
 
     /* Constructor */
-    public MecanumHardware(){
+    public CatMecanumHardware(){
 
     }
 
@@ -122,6 +126,8 @@ public class MecanumHardware
         intakeServo      = hwMap.crservo.get("intakey");
         extenderServo    = hwMap.crservo.get("extendey");
         markerServo      = hwMap.servo.get("markey");
+        // Define and Initialize Sensors
+        landerSeer       = hwMap.ultrasonicSensor.get("lander_seer");
 
         // Define motor direction //
         leftFrontMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -366,59 +372,73 @@ public class MecanumHardware
          * for the / side of motors.
          */
 // TODO: 10/17/2018 Continue work on this....
+
         double leftFront  = Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng));
         double rightFront = -Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng));
         double leftBack   = -Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng));
         double rightBack  = Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng));
 
-        int distanceToTravel = 0;
 
-        double SF = findScalor(leftFront, rightFront, leftBack, rightBack);
-        leftFront  = leftFront  * SF * power;
-        rightFront = rightFront * SF * power;
-        leftBack   = leftBack   * SF * power;
-        rightBack  = rightBack  * SF * power;
-
-
-        runNoEncoders();
-        drive(leftFront, rightFront, leftBack, rightBack);
-
-        opMode.telemetry.addData("Power: ","%.2f, %.2f, %.2f, %.2f", leftFront, rightFront, leftBack, rightBack);
-
+        int newLeftFrontTarget;
+        int newRightFrontTarget;
+        int newLeftBackTarget;
+        int newRightBackTarget;
         ElapsedTime runtime = new ElapsedTime();
         boolean keepDriving = true;
 
         if (opMode.opModeIsActive()) {
 
-            // Determine new target position, and pass to motor controller
-            distanceToTravel  = (int) (vectorDistance * COUNTS_PER_INCH);
+            // Determine new target position and multiply each one to adjust for variation of mec wheels
+            newLeftFrontTarget  = (int) (vectorDistance * COUNTS_PER_INCH * (Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng))));
+            newRightFrontTarget = (int) (vectorDistance * COUNTS_PER_INCH * (-Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng))));
+            newLeftBackTarget   = (int) (vectorDistance * COUNTS_PER_INCH * (-Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng))));
+            newRightBackTarget  = (int) (vectorDistance * COUNTS_PER_INCH * (Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng))));
 
+            // Set the motors to travel towards their desired targets
+            resetEncoders();
+            runToPosition();
+            // TODO: 11/19/2018 DO WE WANT TO USE RUN TO POSITION????
+            leftFrontMotor.setTargetPosition(newLeftFrontTarget);
+            rightFrontMotor.setTargetPosition(newRightFrontTarget);
+            leftBackMotor.setTargetPosition(newLeftBackTarget);
+            rightBackMotor.setTargetPosition(newRightBackTarget);
 
             // Reset the timeout time and start motion.
             runtime.reset();
 
-            drive(power, power, power, power);
+            // Negate the power if we are going backwards
+            if (vectorDistance < 0) {
+                power = -power;
+            }
+
+            // Calculate motor drive powers after we decide direction
+            double SF = findScalor(leftFront, rightFront, leftBack, rightBack);
+            leftFront  = leftFront  * SF * power;
+            rightFront = rightFront * SF * power;
+            leftBack   = leftBack   * SF * power;
+            rightBack  = rightBack  * SF * power;
+            // Drive
+            drive(leftFront, rightFront, leftBack, rightBack);
 
             while (opMode.opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
                     keepDriving) {
 
-                int leftFrontPosition = leftFrontMotor.getCurrentPosition();
+                // Find the current positions so that we can display it later
+                int leftFrontPosition  = leftFrontMotor.getCurrentPosition();
                 int rightFrontPosition = rightFrontMotor.getCurrentPosition();
-                int leftBackPosition = leftBackMotor.getCurrentPosition();
-                int rightBackPosition = rightBackMotor.getCurrentPosition();
+                int leftBackPosition   = leftBackMotor.getCurrentPosition();
+                int rightBackPosition  = rightBackMotor.getCurrentPosition();
 
                 //  Exit the method once robot stops
-                if (!leftFrontMotor.isBusy() || !rightFrontMotor.isBusy() ||
-                        !leftBackMotor.isBusy() || !rightBackMotor.isBusy()) {
+                if (!leftFrontMotor.isBusy() && !rightFrontMotor.isBusy() &&
+                        !leftBackMotor.isBusy() && !rightBackMotor.isBusy()) {
                     keepDriving = false;
                 }
 
-                // Log Messages
-                /*Log.d("catbot", String.format("encoderDrive targ[%5d,%5d], curr[%5d,%5d] power [%.3f,%.3f]",
-                        newLeftTarget,  newRightTarget, leftPosition, rightPosition, leftSpeed, rightSpeed));*/
-
                 // Display it for the driver
+                opMode.telemetry.addData("New Path",  "Running to :%7d :%7d :%7d :%7d",
+                        newLeftFrontTarget,  newRightFrontTarget, newLeftBackTarget, newRightBackTarget);
                 opMode.telemetry.addData("Current Path",  "Running at :%7d :%7d :%7d :%7d",
                         leftFrontPosition, rightFrontPosition, leftBackPosition, rightBackPosition);
                 opMode.telemetry.addData("Power: ", "%.3f", power);

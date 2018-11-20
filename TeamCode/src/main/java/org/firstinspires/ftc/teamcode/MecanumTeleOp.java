@@ -24,11 +24,11 @@ public class MecanumTeleOp extends LinearOpMode {
     private ElapsedTime elapsedGameTime = new ElapsedTime();
 
     /* Declare OpMode members. */
-    MecanumHardware robot;  // Use the mecanum class created for the hardware
+    CatMecanumHardware robot;  // Use the mecanum class created for the hardware
 
     // Our constructor for this class
     public MecanumTeleOp() {
-        robot = new MecanumHardware();
+        robot = new CatMecanumHardware();
     }
 
     @Override

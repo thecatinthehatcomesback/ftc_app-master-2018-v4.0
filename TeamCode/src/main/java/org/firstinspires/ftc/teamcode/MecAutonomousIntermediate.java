@@ -27,7 +27,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class MecAutonomousIntermediate extends LinearOpMode {
 
     /* Declare OpMode members. */
-    MecanumHardware robot = new MecanumHardware();      // Use our mecanum hardware
+    CatMecanumHardware robot = new CatMecanumHardware();      // Use our mecanum hardware
     CatVisionHardware eyes = new CatVisionHardware();   // Doge and vision init
     private ElapsedTime runTime = new ElapsedTime();
     private ElapsedTime delayTimer = new ElapsedTime();
@@ -118,11 +118,11 @@ public class MecAutonomousIntermediate extends LinearOpMode {
             //// TODO: 9/21/2018 Eventually get LED code working...
             // LED code...
             if (isRedAlliance) {
-               // robot.blinky(HardwareCatBot.LED_LightUpType.RED);
-               // robot.allianceColor = HardwareCatBot.LED_LightUpType.RED;
+               // robot.blinky(CatBotHardware.LED_LightUpType.RED);
+               // robot.allianceColor = CatBotHardware.LED_LightUpType.RED;
             } else {
-               // robot.blinky(HardwareCatBot.LED_LightUpType.BLUE);
-              //  robot.allianceColor = HardwareCatBot.LED_LightUpType.BLUE;
+               // robot.blinky(CatBotHardware.LED_LightUpType.BLUE);
+              //  robot.allianceColor = CatBotHardware.LED_LightUpType.BLUE;
             }
 
             telemetry.addData("Delay Timer: ", timeDelay);
@@ -199,27 +199,27 @@ public class MecAutonomousIntermediate extends LinearOpMode {
     }
     public void driveCrater()  throws InterruptedException {
         // Slide if left or right
-        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 10, 3.0);
+        robot.mecDriveVertical(CatMecanumHardware.DRIVE_SPEED, 10, 3.0);
         switch (samplingPos) {
             case LEFT:
-                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, 14, 4.0);
+                robot.mecDriveHorizontal(CatMecanumHardware.DRIVE_SPEED, 14, 4.0);
                 break;
             case RIGHT:
             case UNKNOWN:
-                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, -20, 4.0);
+                robot.mecDriveHorizontal(CatMecanumHardware.DRIVE_SPEED, -20, 4.0);
                 break;
         }
         // Drive forward
-        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 12, 4.0);
-        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, -10.5, 4.0);
+        robot.mecDriveVertical(CatMecanumHardware.DRIVE_SPEED, 12, 4.0);
+        robot.mecDriveVertical(CatMecanumHardware.DRIVE_SPEED, -10.5, 4.0);
         // Switch back to the center
         switch (samplingPos) {
             case LEFT:
-                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, -14, 4.0);
+                robot.mecDriveHorizontal(CatMecanumHardware.DRIVE_SPEED, -14, 4.0);
                 break;
             case RIGHT:
             case UNKNOWN:
-                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, 20, 4.0);
+                robot.mecDriveHorizontal(CatMecanumHardware.DRIVE_SPEED, 20, 4.0);
                 break;
         }
         robot.mecTurn(robot.TURN_SPEED, -75, 3.0);
@@ -228,16 +228,16 @@ public class MecAutonomousIntermediate extends LinearOpMode {
         robot.mecDriveVertical(robot.DRIVE_SPEED, 49.0, 3.0);
         robot.mecTurn(robot.TURN_SPEED, -127, 3.0);
         // Slides right against the wall
-        robot.mecDriveHorizontal(MecanumHardware.HYPER_SPEED,-5,2);
+        robot.mecDriveHorizontal(CatMecanumHardware.HYPER_SPEED,-5,2);
         // Drive into depot
         robot.mecDriveVertical(robot.DRIVE_SPEED, 45, 3.5);
-        robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED,3, 2);
+        robot.mecDriveHorizontal(CatMecanumHardware.DRIVE_SPEED,3, 2);
         robot.markerRelease();
-        robot.mecDriveHorizontal(MecanumHardware.HYPER_SPEED,3, 2);
+        robot.mecDriveHorizontal(CatMecanumHardware.HYPER_SPEED,3, 2);
         robot.robotWait (0.7);
-        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED,-10,3);
+        robot.mecDriveVertical(CatMecanumHardware.DRIVE_SPEED,-10,3);
         robot.markerIn();
-        robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED,-6,2);
+        robot.mecDriveHorizontal(CatMecanumHardware.DRIVE_SPEED,-6,2);
         // Turn 45 towards the right crater
         if ((isParkRedCrater && isRedAlliance) || (!isRedAlliance && !isParkRedCrater)) {
             robot.mecTurn(robot.TURN_SPEED, -134, 3.0);
@@ -253,27 +253,27 @@ public class MecAutonomousIntermediate extends LinearOpMode {
     public void driveDepot() throws InterruptedException {
 
         // Slide if left or right
-        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 10, 3.0);
+        robot.mecDriveVertical(CatMecanumHardware.DRIVE_SPEED, 10, 3.0);
         switch (samplingPos) {
             case LEFT:
-                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, 14, 4.0);
+                robot.mecDriveHorizontal(CatMecanumHardware.DRIVE_SPEED, 14, 4.0);
                 break;
             case RIGHT:
             case UNKNOWN:
-                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, -20, 4.0);
+                robot.mecDriveHorizontal(CatMecanumHardware.DRIVE_SPEED, -20, 4.0);
                 break;
         }
         // Drive forward
-        robot.mecDriveVertical(MecanumHardware.DRIVE_SPEED, 34, 4.0);
+        robot.mecDriveVertical(CatMecanumHardware.DRIVE_SPEED, 34, 4.0);
 
         // Switch back to the center
         switch (samplingPos) {
             case LEFT:
-                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, -14, 4.0);
+                robot.mecDriveHorizontal(CatMecanumHardware.DRIVE_SPEED, -14, 4.0);
                 break;
             case RIGHT:
             case UNKNOWN:
-                robot.mecDriveHorizontal(MecanumHardware.DRIVE_SPEED, 20, 4.0);
+                robot.mecDriveHorizontal(CatMecanumHardware.DRIVE_SPEED, 20, 4.0);
                 break;
         }
 

@@ -26,7 +26,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class ResetTail extends LinearOpMode {
 
     /* Declare OpMode members. */
-    MecanumHardware robot = new MecanumHardware();   // Use the mecanum hardware
+    CatMecanumHardware robot = new CatMecanumHardware();   // Use the mecanum hardware
     private ElapsedTime runtime = new ElapsedTime();
 
     @Override

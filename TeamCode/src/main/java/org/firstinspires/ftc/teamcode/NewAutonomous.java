@@ -22,14 +22,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class NewAutonomous extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwareCatBot robot = new HardwareCatBot();   // Use a Pushbot's hardware
+    CatBotHardware robot = new CatBotHardware();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
     private ElapsedTime delaytimer = new ElapsedTime();
     private double timeDelay;
     private boolean isRedMission = true;
-    private HardwareCatBot.SOCKmission mission = HardwareCatBot.SOCKmission.CENTER;
+    private CatBotHardware.SOCKmission mission = CatBotHardware.SOCKmission.CENTER;
 
-    private HardwareCatBot.StonePos stonePos = HardwareCatBot.StonePos.Nah;
+    private CatBotHardware.StonePos stonePos = CatBotHardware.StonePos.Nah;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -91,21 +91,21 @@ public class NewAutonomous extends LinearOpMode {
             }
 
             if (gamepad1.dpad_right && delaytimer.seconds() > 0.8) {
-                if (stonePos == HardwareCatBot.StonePos.Audience) {
-                    stonePos = HardwareCatBot.StonePos.Nah;
+                if (stonePos == CatBotHardware.StonePos.Audience) {
+                    stonePos = CatBotHardware.StonePos.Nah;
                 } else {
-                    stonePos = HardwareCatBot.StonePos.Audience;
+                    stonePos = CatBotHardware.StonePos.Audience;
                 }
                 delaytimer.reset();
             }
 
             // LED code...
             if (isRedMission) {
-                robot.blinky(HardwareCatBot.LED_LightUpType.RED);
-                robot.allianceColor = HardwareCatBot.LED_LightUpType.RED;
+                robot.blinky(CatBotHardware.LED_LightUpType.RED);
+                robot.allianceColor = CatBotHardware.LED_LightUpType.RED;
             } else {
-                robot.blinky(HardwareCatBot.LED_LightUpType.BLUE);
-                robot.allianceColor = HardwareCatBot.LED_LightUpType.BLUE;
+                robot.blinky(CatBotHardware.LED_LightUpType.BLUE);
+                robot.allianceColor = CatBotHardware.LED_LightUpType.BLUE;
             }
 
             telemetry.addData("Delay Timer: ", timeDelay);
@@ -115,7 +115,7 @@ public class NewAutonomous extends LinearOpMode {
             } else {
                 telemetry.addData("Alliance:", "Blue");
             }
-            if (stonePos == HardwareCatBot.StonePos.Audience) {
+            if (stonePos == CatBotHardware.StonePos.Audience) {
                 telemetry.addData("Stone:", "Audience");
             } else {
                 telemetry.addData("Stone:", "Nah");

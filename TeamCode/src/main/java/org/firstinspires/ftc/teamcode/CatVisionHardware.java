@@ -2,7 +2,7 @@
       CatVisionHardware.java
 
         An "hardware" class intended to contain common code for accessing the hardware
-        This is a modified (stripped down) version of HardwareCatBot to
+        This is a modified (stripped down) version of CatBotHardware to
         be used with Mecanum drivetrain.  This is mostly to test the machine vision
 
         This file is a HEAVILY modified version from the FTC SDK.

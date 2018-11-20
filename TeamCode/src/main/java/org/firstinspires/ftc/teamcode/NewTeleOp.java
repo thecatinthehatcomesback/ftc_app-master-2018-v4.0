@@ -25,15 +25,15 @@ public class NewTeleOp extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     private ElapsedTime driveModeSwitch     = new ElapsedTime();
-    private HardwareCatBot.TeleOpDriveMode driveMode = HardwareCatBot.TeleOpDriveMode.TankDrive;
+    private CatBotHardware.TeleOpDriveMode driveMode = CatBotHardware.TeleOpDriveMode.TankDrive;
 
 
     /* Declare OpMode members. */
-    HardwareCatBot robot; // use the class created for the hardware
+    CatBotHardware robot; // use the class created for the hardware
 
     // constructor for class
     public NewTeleOp() {
-        robot = new HardwareCatBot();
+        robot = new CatBotHardware();
     }
 
     @Override

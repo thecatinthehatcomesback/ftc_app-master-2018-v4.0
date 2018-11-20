@@ -30,11 +30,11 @@ public class TestTeleOp extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     /* Declare OpMode members. */
-    MecanumHardware robot; // use the class created for the hardware
+    CatMecanumHardware robot; // use the class created for the hardware
 
     // constructor for class
     public TestTeleOp() {
-        robot = new MecanumHardware();
+        robot = new CatMecanumHardware();
     }
 
     @Override
@@ -131,13 +131,19 @@ public class TestTeleOp extends LinearOpMode {
              * ---   TELEMETRY   ---
              * ---   \/ \/ \/    ---
              */
+            // Motor Power
             telemetry.addData("Left Front Power:", "%.2f", leftFront);
             telemetry.addData("Right Front Power:", "%.2f", rightFront);
             telemetry.addData("Left Back Power:", "%.2f", leftBack);
             telemetry.addData("Right Back Power:", "%.2f", rightBack);
+            // Tail Motor Pos
             telemetry.addData("Tail Motor Position: %i", robot.tailMotor.getCurrentPosition());
+            // IMU Sensor
             telemetry.addData("Z Y X: ", "%.1f, %.1f, %.1f", angles.firstAngle, angles.secondAngle, angles.thirdAngle);
-            telemetry.addData("Marker Pos", " %.2f",robot.markerServo.getPosition());
+            // Team Marker Servo
+            telemetry.addData("Marker Pos", " %.2f", robot.markerServo.getPosition());
+            // Sensors
+            telemetry.addData("Ultrasonic Level:", robot.landerSeer.getUltrasonicLevel());
             telemetry.update();
         }
     }

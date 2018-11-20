@@ -1,5 +1,5 @@
 /*
-      HardwareCatBot.java
+      CatBotHardware.java
 
         An "hardware" class intended to contain common code for accessing the hardware
 
@@ -57,7 +57,7 @@ import java.util.List;
  * Motor channel:  Right drive motor:        "right_rear" & "right_front"
  * others tbd.....
  */
-public class HardwareCatBot
+public class CatBotHardware
 {
     /* Public OpMode members. */
     public DcMotor  leftMotor           = null;
@@ -185,7 +185,7 @@ public class HardwareCatBot
     public int numTimes = 0;
 
     /* Constructor */
-    public HardwareCatBot(){
+    public CatBotHardware(){
 
     }
 
