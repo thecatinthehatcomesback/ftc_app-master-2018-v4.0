@@ -54,7 +54,7 @@ public class MecanumHardware
 
     // Autonomous Drive Speeds
     static final double     DRIVE_SPEED             = 0.45;
-    static final double     HYPER_SPEED             = 0.7;
+    static final double     HYPER_SPEED             = 0.6;
     static final double     CHILL_SPEED             = 0.3;
     static final double     CREEP_SPEED             = 0.1;
     static final double     TURN_SPEED              = 0.35;
@@ -519,10 +519,10 @@ public class MecanumHardware
 
         //  All the way down
         tailPos[0] = 0;
-        //  Out of hook
-        tailPos[1] = 8300;
-        //  Way high out of hook
-        tailPos[2] = 8400;
+        //  Out of hook at Eagan competition
+        tailPos[1] = -8300;
+        //  Way high out of hook at our own field
+        tailPos[2] = -8500;
 
     };
     public void retractTail() {
@@ -607,18 +607,28 @@ public class MecanumHardware
          * Pull tail in all the way
          */
 
+        ElapsedTime saftey = new ElapsedTime();
+        saftey.reset();
+
 
         tailMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         // Get motor down
-        tailMotor.setTargetPosition(8500);
+        tailMotor.setTargetPosition(-8300);
         tailMotor.setPower(1.0);
         // Wait until the robot is completely finished
         while(tailMotor.isBusy()){
             robotWait(1.0);
+            if (saftey.seconds() > 4.5) {
+                tailMotor.setPower(-1.0);
+                robotWait(.3);
+                tailMotor.setPower(0.0);
+                break;
+            }
         }
 
+        // Make sure we stop tail
+        tailMotor.setPower(0.0);
         // Pull tail back into the robot (not there yet...)
-
     }
 
     /**

@@ -1,5 +1,5 @@
 /**
- MecAutonomousBasic.java
+ MecAutonomousIntermediate.java
 
  A Linear OpMode class to be an autonomous method for both Blue & Red where
  we pick which side of the lander we are hanging off of with gamepad1 and
@@ -23,8 +23,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="Basic Autonomous", group="CatAuto")
-public class MecAutonomousBasic extends LinearOpMode {
+@Autonomous(name="Intermediate Autonomous", group="CatAuto")
+public class MecAutonomousIntermediate extends LinearOpMode {
 
     /* Declare OpMode members. */
     MecanumHardware robot = new MecanumHardware();      // Use our mecanum hardware

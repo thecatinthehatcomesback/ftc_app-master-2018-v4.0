@@ -112,7 +112,7 @@ public class TestTeleOp extends LinearOpMode {
              */
 
             // Tail Control
-            robot.tailMotor.setPower(-gamepad2.right_stick_y);
+            robot.tailMotor.setPower(gamepad1.left_trigger-gamepad1.right_trigger);
 
             // marker
             if(gamepad1.b){
@@ -135,7 +135,7 @@ public class TestTeleOp extends LinearOpMode {
             telemetry.addData("Right Front Power:", "%.2f", rightFront);
             telemetry.addData("Left Back Power:", "%.2f", leftBack);
             telemetry.addData("Right Back Power:", "%.2f", rightBack);
-            telemetry.addData("Tail Motor Position:", robot.tailMotor.getCurrentPosition());
+            telemetry.addData("Tail Motor Position: %i", robot.tailMotor.getCurrentPosition());
             telemetry.addData("Z Y X: ", "%.1f, %.1f, %.1f", angles.firstAngle, angles.secondAngle, angles.thirdAngle);
             telemetry.addData("Marker Pos", " %.2f",robot.markerServo.getPosition());
             telemetry.update();
