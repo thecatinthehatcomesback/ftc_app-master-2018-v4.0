@@ -49,9 +49,8 @@ public class NewTeleOp extends LinearOpMode {
         waitForStart();
 
 
-        // go
+        // Go!!!
         runtime.reset();
-        double driveSpeed;
 
 
         // run until the end of the match (driver presses STOP)

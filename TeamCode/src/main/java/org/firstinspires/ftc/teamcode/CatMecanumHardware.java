@@ -373,10 +373,10 @@ public class CatMecanumHardware
          */
 // TODO: 10/17/2018 Continue work on this....
 
-        double leftFront  = Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng));
-        double rightFront = -Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng));
-        double leftBack   = -Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng));
-        double rightBack  = Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng));
+        double leftFrontMod  = Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng));
+        double rightFrontMod = -Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng));
+        double leftBackMod   = -Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng));
+        double rightBackMod  = Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng));
 
 
         int newLeftFrontTarget;
@@ -389,10 +389,10 @@ public class CatMecanumHardware
         if (opMode.opModeIsActive()) {
 
             // Determine new target position and multiply each one to adjust for variation of mec wheels
-            newLeftFrontTarget  = (int) (vectorDistance * COUNTS_PER_INCH * (Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng))));
-            newRightFrontTarget = (int) (vectorDistance * COUNTS_PER_INCH * (-Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng))));
-            newLeftBackTarget   = (int) (vectorDistance * COUNTS_PER_INCH * (-Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng))));
-            newRightBackTarget  = (int) (vectorDistance * COUNTS_PER_INCH * (Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng))));
+            newLeftFrontTarget  = (int) (vectorDistance * COUNTS_PER_INCH * leftFrontMod);
+            newRightFrontTarget = (int) (vectorDistance * COUNTS_PER_INCH * rightFrontMod);
+            newLeftBackTarget   = (int) (vectorDistance * COUNTS_PER_INCH * leftBackMod);
+            newRightBackTarget  = (int) (vectorDistance * COUNTS_PER_INCH * rightBackMod);
 
             // Set the motors to travel towards their desired targets
             resetEncoders();
@@ -412,13 +412,13 @@ public class CatMecanumHardware
             }
 
             // Calculate motor drive powers after we decide direction
-            double SF = findScalor(leftFront, rightFront, leftBack, rightBack);
-            leftFront  = leftFront  * SF * power;
-            rightFront = rightFront * SF * power;
-            leftBack   = leftBack   * SF * power;
-            rightBack  = rightBack  * SF * power;
+            double SF = findScalor(leftFrontMod, rightFrontMod, leftBackMod, rightBackMod);
+            leftFrontMod  = leftFrontMod  * SF * power;
+            rightFrontMod = rightFrontMod * SF * power;
+            leftBackMod   = leftBackMod   * SF * power;
+            rightBackMod  = rightBackMod  * SF * power;
             // Drive
-            drive(leftFront, rightFront, leftBack, rightBack);
+            drive(leftFrontMod, rightFrontMod, leftBackMod, rightBackMod);
 
             while (opMode.opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&

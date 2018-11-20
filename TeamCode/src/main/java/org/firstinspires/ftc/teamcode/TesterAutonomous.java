@@ -1,5 +1,5 @@
 /**
- MecTesterAutonomous.java
+ TesterAutonomous.java
 
  A Linear OpMode class to be place to test code
  both old and new.  We constantly edit this, taking
@@ -16,8 +16,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="Mec Testing Autonomous", group="CatAuto")
-public class MecTesterAutonomous extends LinearOpMode {
+@Autonomous(name="Testing Autonomous", group="CatAuto")
+public class TesterAutonomous extends LinearOpMode {
 
     /* Declare OpMode members. */
     CatMecanumHardware robot = new CatMecanumHardware();   // Use the mecanum hardware
@@ -59,10 +59,10 @@ public class MecTesterAutonomous extends LinearOpMode {
          *
          \*/
 
-        robot.mecTurn(CatMecanumHardware.TURN_SPEED, 90, 3);
-
-        robot.mecTurn(CatMecanumHardware.TURN_SPEED, -90, 3);
-
+        robot.advMecDrive(CatMecanumHardware.DRIVE_SPEED, 7, 0, 3);
+        robot.advMecDrive(CatMecanumHardware.DRIVE_SPEED, 7, 90, 3);
+        robot.advMecDrive(CatMecanumHardware.DRIVE_SPEED, 7, 180, 3);
+        robot.advMecDrive(CatMecanumHardware.DRIVE_SPEED, 7, 270, 3);
 
 
         /**
