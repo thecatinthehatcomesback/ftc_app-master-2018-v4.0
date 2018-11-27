@@ -1,7 +1,8 @@
-/*
+/**
       CatBotHardware.java
 
         An "hardware" class intended to contain common code for accessing the hardware
+        and common methods
 
         This file is a HEAVILY modified version from the FTC SDK.
 

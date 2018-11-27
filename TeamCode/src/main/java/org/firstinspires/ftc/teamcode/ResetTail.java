@@ -52,7 +52,7 @@ public class ResetTail extends LinearOpMode {
          * DO STUFF FOR MODE!!!!!!!!!!!
          *
          \*/
-        int tempEncTicks;
+        int newEncTicks;
         int oldEncTicks = 40;
 
         runtime.reset();
@@ -60,14 +60,14 @@ public class ResetTail extends LinearOpMode {
 
         while (opModeIsActive()) {
             // Get the current encoder value
-            tempEncTicks = robot.tailMotor.getCurrentPosition() - oldEncTicks;
+            newEncTicks = robot.tailMotor.getCurrentPosition();
             // Set tail to retract slowly at quarter power
             robot.tailMotor.setPower(-0.4);
 
-            // Watch the encoder ticks
-            if (runtime.milliseconds() > 1500) {
+            // Every so often, check the values
+            if (runtime.milliseconds() > 750) {
                 // Once the encoder ticks slows down or stops
-                if (tempEncTicks > -40) {
+                if ((newEncTicks - oldEncTicks) > -80) {
                     // Cut power to tail
                     robot.tailMotor.setPower(0.0);
                     // Tell EVERYONE!!!
@@ -76,14 +76,14 @@ public class ResetTail extends LinearOpMode {
                     robot.robotWait(3.0);
                     // End OpMode
                     stop();
-                } else {
-                    // Otherwise continue as normal and reset timer
-                    oldEncTicks = tempEncTicks;
-                    telemetry.addData("Status: ", "Still going...");
-                    runtime.reset();
                 }
+
+                // Otherwise continue as normal and reset timer
+                telemetry.addData("Status: ", "Still going...");
+                runtime.reset();
+                oldEncTicks = newEncTicks;
             }
-            telemetry.addData("Current Enc Ticks: ", tempEncTicks);
+            telemetry.addData("Current Enc Ticks: ", newEncTicks);
             telemetry.addData("Old Enc Ticks: ", oldEncTicks);
             telemetry.update();
         }

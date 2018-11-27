@@ -19,6 +19,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
@@ -137,13 +138,13 @@ public class TestTeleOp extends LinearOpMode {
             telemetry.addData("Left Back Power:", "%.2f", leftBack);
             telemetry.addData("Right Back Power:", "%.2f", rightBack);
             // Tail Motor Pos
-            telemetry.addData("Tail Motor Position: %i", robot.tailMotor.getCurrentPosition());
+            telemetry.addData("Tail Motor Position: ", robot.tailMotor.getCurrentPosition());
             // IMU Sensor
             telemetry.addData("Z Y X: ", "%.1f, %.1f, %.1f", angles.firstAngle, angles.secondAngle, angles.thirdAngle);
             // Team Marker Servo
             telemetry.addData("Marker Pos", " %.2f", robot.markerServo.getPosition());
             // Sensors
-            telemetry.addData("Ultrasonic Level:", robot.landerSeer.getUltrasonicLevel());
+            telemetry.addData("Ultrasonic Level:", "%.3f", robot.landerSeer.getDistance(DistanceUnit.CM));
             telemetry.update();
         }
     }

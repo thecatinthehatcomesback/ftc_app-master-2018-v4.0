@@ -16,13 +16,13 @@ import android.util.Log;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
@@ -95,7 +95,7 @@ public class CatMecanumHardware
 
 
     // Sensors
-    public UltrasonicSensor     landerSeer  = null;
+    public ModernRoboticsI2cRangeSensor landerSeer  = null;
 
     /* local OpMode members. */
     HardwareMap hwMap           = null;
@@ -127,7 +127,7 @@ public class CatMecanumHardware
         extenderServo    = hwMap.crservo.get("extendey");
         markerServo      = hwMap.servo.get("markey");
         // Define and Initialize Sensors
-        landerSeer       = hwMap.ultrasonicSensor.get("lander_seer");
+        landerSeer       = hwMap.get(ModernRoboticsI2cRangeSensor.class, "lander_seer");
 
         // Define motor direction //
         leftFrontMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -540,9 +540,9 @@ public class CatMecanumHardware
         //  All the way down
         tailPos[0] = 0;
         //  Out of hook at Eagan competition
-        tailPos[1] = -8300;
+        tailPos[1] = 8300;
         //  Way high out of hook at our own field
-        tailPos[2] = -8500;
+        tailPos[2] = 8500;
 
     };
     public void retractTail() {
