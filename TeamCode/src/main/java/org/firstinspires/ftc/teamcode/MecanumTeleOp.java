@@ -132,8 +132,6 @@ public class MecanumTeleOp extends LinearOpMode {
              * ---   \/ \/ \/ \/ \/ \/   ---
              */
 
-            // TODO: 11/5/2018 Add buttons and sticks for the arm and intake...
-
             // Tail control  for Driver 2
             /*
             if (gamepad2.y) {
@@ -170,6 +168,7 @@ public class MecanumTeleOp extends LinearOpMode {
             telemetry.addData("Right Back Power:", "%.2f", rightBack);
             telemetry.addData("Tail Encoder Position:", robot.tailMotor.getCurrentPosition());
             telemetry.addData("Intake Speed:", robot.intakeServo.getPower());
+            telemetry.addData("Potentiometer Voltage:", robot.potentiometer.getVoltage());
             telemetry.update();
         }
     }

@@ -19,6 +19,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -57,7 +58,7 @@ public class CatMecanumHardware
     // Autonomous Drive Speeds
     static final double     DRIVE_SPEED             = 0.45;
     static final double     HYPER_SPEED             = 0.6;
-    static final double     CHILL_SPEED             = 0.3;
+    static final double     CHILL_SPEED             = 0.25;
     static final double     CREEP_SPEED             = 0.1;
     static final double     TURN_SPEED              = 0.35;
 
@@ -102,6 +103,7 @@ public class CatMecanumHardware
 
     // Sensors
     public ModernRoboticsI2cRangeSensor landerSeer  = null;
+    public AnalogInput potentiometer = null;
 
     /* local OpMode members. */
     HardwareMap hwMap           = null;
@@ -139,6 +141,7 @@ public class CatMecanumHardware
         markerServo      = hwMap.servo.get("markey");
         // Define and Initialize Sensors
         landerSeer       = hwMap.get(ModernRoboticsI2cRangeSensor.class, "lander_seer");
+        potentiometer    = hwMap.analogInput.get("potentiometer");
 
         // Define motor direction //
         leftFrontMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -331,7 +334,8 @@ public class CatMecanumHardware
                 power = -power;
             }
 
-            drive(power, power, power, power);
+            // Due to weight diffence, we compensate by cutting the back wheels half power
+            drive(power, power, power*0.8, power*0.8);
 
             while (opMode.opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
@@ -343,8 +347,8 @@ public class CatMecanumHardware
                 int rightBackPosition = rightBackMotor.getCurrentPosition();
 
                 //  Exit the method once robot stops
-                if (!leftFrontMotor.isBusy() || !rightFrontMotor.isBusy() ||
-                        !leftBackMotor.isBusy() || !rightBackMotor.isBusy()) {
+                if (!leftFrontMotor.isBusy() && !rightFrontMotor.isBusy() &&
+                        !leftBackMotor.isBusy() && !rightBackMotor.isBusy()) {
                     keepDriving = false;
                 }
 
@@ -382,7 +386,7 @@ public class CatMecanumHardware
          * powers for \ side of motors while we subtract Sin from Cos
          * for the / side of motors.
          */
-// TODO: 10/17/2018 Continue work on this....
+// TODO: 12/3/2018 Continue work on this....
 
         double leftFrontMod  = Math.sin(Math.toRadians(vectorAng))  + Math.cos(Math.toRadians(vectorAng));
         double rightFrontMod = -Math.sin(Math.toRadians(vectorAng)) + Math.cos(Math.toRadians(vectorAng));
@@ -660,6 +664,42 @@ public class CatMecanumHardware
         // Make sure we stop tail
         tailMotor.setPower(0.0);
         // Pull tail back into the robot (not there yet...)
+    }
+
+    // Potentiometor //
+    public double getPoteniometorAngle() {
+
+        /**
+         * Arm folded in        = 0.135V
+         * Arm about vertical   = 1.200V
+         * Arm extended back    = 3.250V
+         *
+         *
+         * :::MATH:::
+         *
+         * If
+         * 180 = mx + b
+         * x = 1.2
+         * and
+         * 45 = mx + b
+         * x = 0.135
+         *
+         * rise/run must be
+         * m = (1.2-0.135) / (180-45) == 126.76
+         *
+         *
+         * 180 = (126.76)(1.2) + b
+         * b = 27.888
+         */
+
+        double degrees;
+        double m = 126.76;
+        double x = potentiometer.getVoltage();
+        double b = 27.888;
+
+        degrees = (m*x) + b;
+
+        return degrees;
     }
 
     /**
