@@ -62,7 +62,6 @@ public class TestTeleOp extends LinearOpMode {
         double leftBack = 0;
         double rightBack = 0;
         double SF;
-        double markerPos = 0;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -74,6 +73,16 @@ public class TestTeleOp extends LinearOpMode {
              */
 
 
+            if (gamepad1.y && runtime.milliseconds()>200){
+                robot.pattern = robot.pattern.next();
+                robot.lights.setPattern(robot.pattern);
+                runtime.reset();
+            }
+            if (gamepad1.a && runtime.milliseconds()>200){
+                robot.pattern = robot.pattern.previous();
+                robot.lights.setPattern(robot.pattern);
+                runtime.reset();
+            }
             //  ---  SPEED BOOST!!!  --- //
             if (gamepad1.left_bumper) {
                 driveSpeed = 1;
@@ -113,16 +122,7 @@ public class TestTeleOp extends LinearOpMode {
              */
 
             // Tail Control
-            robot.tailMotor.setPower(gamepad1.left_trigger-gamepad1.right_trigger);
-
-            // marker
-            if(gamepad1.b){
-                markerPos += 0.005;
-            }
-            if(gamepad1.x) {
-                markerPos -= 0.005;
-            }
-            robot.markerServo.setPosition(markerPos);
+            robot.tailMotor.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
 
             // IMU Sensor
             Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -132,11 +132,6 @@ public class TestTeleOp extends LinearOpMode {
              * ---   TELEMETRY   ---
              * ---   \/ \/ \/    ---
              */
-            // Motor Power
-            telemetry.addData("Left Front Power:", "%.2f", leftFront);
-            telemetry.addData("Right Front Power:", "%.2f", rightFront);
-            telemetry.addData("Left Back Power:", "%.2f", leftBack);
-            telemetry.addData("Right Back Power:", "%.2f", rightBack);
             // Tail Motor Pos
             telemetry.addData("Tail Motor Position: ", robot.tailMotor.getCurrentPosition());
             // IMU Sensor
@@ -145,6 +140,9 @@ public class TestTeleOp extends LinearOpMode {
             telemetry.addData("Marker Pos", " %.2f", robot.markerServo.getPosition());
             // Sensors
             telemetry.addData("Ultrasonic Level:", "%.3f", robot.landerSeer.getDistance(DistanceUnit.CM));
+
+
+            telemetry.addData("pattern", "%s",robot.pattern.toString());
             telemetry.update();
         }
     }

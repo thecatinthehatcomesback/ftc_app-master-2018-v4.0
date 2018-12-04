@@ -17,6 +17,7 @@ import android.util.Log;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -86,6 +87,11 @@ public class CatMecanumHardware
     public DcMotor  tailMotor        = null;
     public DcMotor  armMotor         = null;
 
+    //LED stufff
+    public RevBlinkinLedDriver lights = null;
+    public RevBlinkinLedDriver.BlinkinPattern pattern;
+    public static boolean isRedAlliance = true;
+
     public Servo    identityRelease  = null;
     public Servo    markerServo      = null;
 
@@ -121,6 +127,11 @@ public class CatMecanumHardware
         rightBackMotor   = hwMap.dcMotor.get("right_rear_motor");
         tailMotor        = hwMap.dcMotor.get("tail_motor");
         armMotor         = hwMap.dcMotor.get("arm_motor");
+
+        // blinkin stuff
+        lights           = hwMap.get(RevBlinkinLedDriver.class, "blinky");
+        pattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
+        lights.setPattern(pattern);
         // Define and Initialize Servos //
         identityRelease  = hwMap.servo.get("identity_release");
         intakeServo      = hwMap.crservo.get("intakey");

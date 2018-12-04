@@ -11,6 +11,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -25,6 +26,7 @@ public class MecanumTeleOp extends LinearOpMode {
 
     /* Declare OpMode members. */
     CatMecanumHardware robot;  // Use the mecanum class created for the hardware
+    boolean inReverse = true;
 
     // Our constructor for this class
     public MecanumTeleOp() {
@@ -45,7 +47,11 @@ public class MecanumTeleOp extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-
+        if(robot.isRedAlliance) {
+            robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_LAVA_PALETTE);
+        } else {
+            robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_OCEAN_PALETTE);
+        }
         // Go!
         elapsedGameTime.reset();
         double driveSpeed;
@@ -72,15 +78,37 @@ public class MecanumTeleOp extends LinearOpMode {
             } else {
                 driveSpeed = 0.6;
             }
+
+            //select direction
+            if (gamepad1.y){
+                inReverse = false;
+                if(robot.isRedAlliance) {
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.SHOT_RED);
+                } else {
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.SHOT_BLUE);
+                }
+            }
+            if (gamepad1.a) {
+                inReverse = true;
+                if(robot.isRedAlliance) {
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_LAVA_PALETTE);
+                } else {
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_OCEAN_PALETTE);
+                }
+            }
+
             // Input for drive train
-//            leftFront  = -gamepad1.right_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x;
-//            rightFront = -gamepad1.right_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
-//            leftBack   = -gamepad1.right_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
-//            rightBack  = -gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
-            leftFront  = gamepad1.right_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
-            rightFront = gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
-            leftBack   = gamepad1.right_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x;
-            rightBack  = gamepad1.right_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
+            if(inReverse) {
+                leftFront  = gamepad1.right_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
+                rightFront = gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
+                leftBack   = gamepad1.right_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x;
+                rightBack  = gamepad1.right_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
+            } else {
+                leftFront  = -gamepad1.right_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x;
+                rightFront = -gamepad1.right_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
+                leftBack   = -gamepad1.right_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
+                rightBack  = -gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
+            }
 
             // Calculate the scale factor to reduce the powers
             SF = robot.findScalor(leftFront, rightFront, leftBack, rightBack);

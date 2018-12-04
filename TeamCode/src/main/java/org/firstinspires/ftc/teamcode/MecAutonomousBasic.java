@@ -18,6 +18,7 @@
  */
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -34,7 +35,7 @@ public class MecAutonomousBasic extends LinearOpMode {
     private double timeDelay;
     private boolean isRedAlliance = true;
     private boolean isCraterSide = true;
-    private boolean isParkRedCrater = true;
+    private boolean isParkNearCrater = true;
 
     private CatVisionHardware.samplingPos samplingPos = CatVisionHardware.samplingPos.RIGHT;
 
@@ -89,18 +90,20 @@ public class MecAutonomousBasic extends LinearOpMode {
             if (((gamepad1.dpad_left) && delayTimer.seconds() > 0.8)) {
                 if (isRedAlliance) {
                     isRedAlliance = false;
+                    robot.isRedAlliance = false;
                 } else {
                     isRedAlliance = true;
+                    robot.isRedAlliance = true;
                 }
                 delayTimer.reset();
             }
 
             //change which crater we'll park in :)
             if (((gamepad1.a) && delayTimer.seconds() > 0.8)) {
-                if (isParkRedCrater) {
-                    isParkRedCrater = false;
+                if (isParkNearCrater) {
+                    isParkNearCrater = false;
                 } else {
-                    isParkRedCrater = true;
+                    isParkNearCrater = true;
                 }
                 delayTimer.reset();
             }
@@ -115,14 +118,19 @@ public class MecAutonomousBasic extends LinearOpMode {
                 delayTimer.reset();
             }
 
-            //// TODO: 9/21/2018 Eventually get LED code working...
             // LED code...
             if (isRedAlliance) {
-               // robot.blinky(CatBotHardware.LED_LightUpType.RED);
-               // robot.allianceColor = CatBotHardware.LED_LightUpType.RED;
+                if(isCraterSide){
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                 } else {
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.SHOT_RED);
+                }
             } else {
-               // robot.blinky(CatBotHardware.LED_LightUpType.BLUE);
-              //  robot.allianceColor = CatBotHardware.LED_LightUpType.BLUE;
+                if(isCraterSide){
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+                } else {
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.SHOT_BLUE);
+                }
             }
 
             telemetry.addData("Delay Timer: ", timeDelay);
@@ -139,10 +147,10 @@ public class MecAutonomousBasic extends LinearOpMode {
                 telemetry.addData("Lander Side: ", "Depot");
             }
 
-            if (isParkRedCrater) {
-                telemetry.addData("Parking Crater: ", "Red");
+            if (isParkNearCrater) {
+                telemetry.addData("Parking Crater: ", "Near");
             } else {
-                telemetry.addData("Parking Crater: ", "Blue");
+                telemetry.addData("Parking Crater: ", "Far");
             }
             telemetry.update();
 
@@ -175,6 +183,37 @@ public class MecAutonomousBasic extends LinearOpMode {
         // Find and store the values of the sampling
         samplingPos = eyes.findGoldPos();
 
+        switch(samplingPos) {
+            case LEFT:
+                if (isRedAlliance) {
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_LAVA_PALETTE);
+                } else {
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_OCEAN_PALETTE);
+                }
+
+                break;
+            case RIGHT:
+                if (isRedAlliance) {
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+                } else {
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+                }
+
+                break;
+            case CENTER:
+                if (isRedAlliance) {
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.SINELON_LAVA_PALETTE);
+                } else {
+                    robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.SINELON_OCEAN_PALETTE);
+                }
+
+                break;
+            case UNKNOWN:
+                robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                break;
+
+
+        }
         //Delay the amount we selected
         robot.robotWait(timeDelay);
 
@@ -222,6 +261,12 @@ public class MecAutonomousBasic extends LinearOpMode {
                 robot.mecDriveHorizontal(CatMecanumHardware.DRIVE_SPEED, 20, 4.0);
                 break;
         }
+        if (isRedAlliance) {
+            robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.SINELON_LAVA_PALETTE);
+        } else {
+            robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.SINELON_OCEAN_PALETTE);
+        }
+
         robot.mecTurn(robot.TURN_SPEED, -75, 3.0);
 
         // Drive Forward about 4 foot (To wall)
@@ -239,7 +284,7 @@ public class MecAutonomousBasic extends LinearOpMode {
         robot.markerIn();
         robot.mecDriveHorizontal(CatMecanumHardware.DRIVE_SPEED,-6,2);
         // Turn 45 towards the right crater
-        if ((isParkRedCrater && isRedAlliance) || (!isRedAlliance && !isParkRedCrater)) {
+        if (isParkNearCrater) {
             robot.mecTurn(robot.TURN_SPEED, -134, 3.0);
         } else {
             robot.mecTurn(robot.TURN_SPEED, -41, 3.0);
@@ -277,7 +322,11 @@ public class MecAutonomousBasic extends LinearOpMode {
                 break;
         }
 
-
+        if (isRedAlliance) {
+            robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.SINELON_LAVA_PALETTE);
+        } else {
+            robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.SINELON_OCEAN_PALETTE);
+        }
         // Drive 4 foot and drop mineral off
         robot.mecDriveVertical(robot.DRIVE_SPEED, 16, 3.0);
         // Drop Marker
@@ -285,7 +334,7 @@ public class MecAutonomousBasic extends LinearOpMode {
         robot.robotWait(1.0);
         robot.markerIn();
         // Turn 45 towards the right crater
-        if ((isParkRedCrater && isRedAlliance) || (!isRedAlliance && !isParkRedCrater)) {
+        if (isParkNearCrater) {
             robot.mecTurn(robot.TURN_SPEED, -41, 3.0);
         } else{
             robot.mecTurn(robot.TURN_SPEED, 41, 3.0);
